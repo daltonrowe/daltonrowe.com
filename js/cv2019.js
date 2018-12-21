@@ -10,7 +10,7 @@ function parallaxBg(id, scrollPosition, ratio) {
     var position = dist - scrollPosition;
     var parallaxPos = Math.floor(position * ratio);
     elem.style.backgroundPosition =
-      parallaxPos * -0.2 + "px " + parallaxPos + "px";
+      parallaxPos * 0.2 + "px " + parallaxPos + "px";
   }
 }
 

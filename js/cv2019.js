@@ -9,8 +9,7 @@ function parallaxBg(id, scrollPosition, ratio) {
     var dist = elem.getBoundingClientRect().top;
     var position = dist - scrollPosition;
     var parallaxPos = Math.floor(position * ratio);
-    elem.style.backgroundPosition =
-      parallaxPos * 0.2 + "px " + parallaxPos + "px";
+    elem.style.backgroundPosition = "0px " + parallaxPos + "px";
   }
 }
 
@@ -21,7 +20,7 @@ function addParallaxListeners() {
 
     if (!ticking) {
       window.requestAnimationFrame(function() {
-        parallaxBg("bg", scrollPosition, 0.2);
+        parallaxBg("bg", scrollPosition, -0.2);
         ticking = false;
       });
 

@@ -106,6 +106,7 @@ ul li p {
    opacity:.5;
    background-image: url(../img/bg_white.png);
    background-size: cover;
+   background-repeat: repeat;
    position:absolute;
    top:0;
    left:0;

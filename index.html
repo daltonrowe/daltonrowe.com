@@ -1,9 +1,154 @@
 <html>
-   <head>
-      <title>Dalton Rowe – Web Developer / Designer</title>
-      <link rel="stylesheet" href="./css/main.css">
-   </head>
-   <body>
+<head>
+   <meta charset="UTF-8">
+   <title>Dalton Rowe – Web Developer / Designer</title>
+   <link rel="stylesheet" href="./css/main.css">
+   
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-27494686-1"></script>
+   <script type="text/javascript">
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+         dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
       
-   </body>
+      gtag("config", "UA-27494686-1");
+   </script>
+</head>
+<body>
+   
+   <div id="main" class="content">
+      
+      <div id="header">
+         <h1>Dalton Rowe</h1>
+         <h2>Web Developer / Designer</h2>
+         <a href="#contact" class='button'>Contact</a>
+      </div>
+      
+      <div id="contact" class="">
+         <form name="contact" method="POST" data-netlify="true">
+            <div id="hmu">
+               <p>
+                  <label>Name: <input type="text" name="name" /></label>   
+               </p>
+               <p>
+                  <label>Email: <input type="email" name="email" /></label>
+               </p>
+               <p>
+                  <label>Subject: <input type="text" name="subject" /></label>
+               </p>
+               <p>
+                  <label>Message: <textarea name="message"></textarea></label>
+               </p>
+            </div>
+            <div id="submit">
+               <button type="submit">Send</button>
+            </div>
+            <div id="close">
+               <a href="#">Close</a>
+            </div>
+         </form>
+      </div>
+      
+      <div id="projects">
+         <ul>
+            <li>
+               <a href="https://yellowberri.com" target="_blank">
+                  <img src="img/yb.png" alt="Yellowberri Thumbnail">
+                  <h3>Yellowberri Creative Studio</h3>
+               </a>
+            </li>
+            <li>
+               <a href="https://hometown.photos" target="_blank">
+                  <img src="img/hometown.png" alt="Bowling Green Kentucky Thumbnail">
+                  <h3>hometown.photos</h3>
+               </a>
+            </li>
+            <li>
+               <a href="https://bgrad.io" target="_blank">
+                  <img src="img/bgradio.png" alt="bgradio Thumbnail">
+                  <h3>https://bgrad.io</h3>
+               </a>
+            </li>
+            <li>
+               <a href="https://porchlord.bandcamp.com" target="_blank">
+                  <img src="img/porchlord.png" alt="Porchlord Thumbnail">
+                  <h3>Porchlord</h3>
+               </a>
+            </li>
+         </ul>
+      </div>
+      
+      <div id="info">
+         
+         <div class="panel">
+            <h3>Design</h3>
+            <p>
+               The best things are designed with a purpose, this site is designed to quick loading and easy to scan.<br>
+               I believe good design plays into the strengths of the media.
+            </p>
+         </div>
+         
+         <div class="panel">
+            <h3>Web Development</h3>
+            
+            <p>
+               <strong>Lead web designer / developer at <a href="https://yellowberri.com">Yellowberri Creative Studio</a>.</strong> I make WordPress, PHP, and Javascript solutions for everything from music festivals to city governments. Not to mention fun stuff like <a href="https://bgrad.io/">https://bgrad.io</a> and video game tournaments.
+            </p>
+            <p>
+               Areas of interest include headless WordPress, SVG animation, live-streaming, Node.js and Javascript as a platform, and educating clients on the possibilities of content development versus the all too common “build it and forget” mentality.
+            </p>
+         </div>
+         
+         <div id="work" class="panel">
+            <h3>Work Experience</h3>
+            <ul>
+               <li>
+                  <h4>Lead Web Designer / Developer</h4>
+                  <h5>Yellowberri Creative Studio ( 2016 - 2018 )</h5>
+                  
+                  <p>
+                     Website design and development from client discovery to launch. Managed timelines and multiple projects, email, team tools, website hosting, maintenance, and management across many different services. Collaborated with business owners on new ideas and technologies. Hosted and provided support for WooCommerce. Provided solutions for ADA, PCI, FDIC and other industry compliances. 
+                     Dressed up as a witch and reviewed sandwiches.
+                  </p>
+               </li>
+               
+               <li>
+                  <h4>Junior Web Designer / Developer</h4>
+                  <h5>Yellowberri Creative Studio ( 2013 - 2016 )</h5>
+                  
+                  <p>
+                     Developed and designed custom WordPress themes for clients both from Photoshop mockups and style guides. Custom PHP/SCSS/JS layouts and features for public libraries, podcasts, churches, music festivals, and dozens of other businesses.
+                  </p>
+               </li>
+               
+               <li>
+                  <strong>Print & eBook Layout and Publishing (Itoh Press, 2012)</strong>
+               </li>
+               <li>
+                  <strong>Graphic Designer (Spectrum Photography, 2008 - 2009 )</strong>
+               </li>
+            </ul>
+         </div>
+         
+         <div class="panel">
+            <h3>Education</h3>
+            <ul>
+               <li>
+                  <h4>Western Kentucky University ( 2008 - 2012 )</h4>
+                  <span>B.F.A. Visual Arts : Concentration in Graphic Design</span> 
+               </li>
+            </ul>
+         </div>
+         
+      </div><!-- #info -->
+   </div><!-- #main -->
+   
+   <div id="bg">
+   </div>
+   
+   <script src="./js/cv2019.js"></script>
+</body>
+
 </html>

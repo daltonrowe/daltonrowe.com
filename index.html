@@ -33,8 +33,11 @@
       </div>
       
       <div id="contact" class="">
-         <form name="contact" method="POST" data-netlify="true">
+         <form name="contact" method="POST" data-netlify="true" netlify-honeypot="mmm">
             <div id="hmu">
+               <p class="hidden">
+                  <label>Don’t fill this out if you're human: <input name="mmm" /></label>
+               </p>
                <p>
                   <label>Name: <input type="text" name="name" /></label>   
                </p>
@@ -50,6 +53,7 @@
                <p>
                   <label>Message: <textarea name="message"></textarea></label>
                </p>
+               <div data-netlify-recaptcha="true"></div>
             </div>
             <div id="submit">
                <button type="submit">Send</button>
@@ -135,11 +139,11 @@
                <li>
                   <strong>Print & eBook Layout and Publishing (Itoh Press, 2012)</strong>
                </li>
-
+               
                <li>
                   <strong>Internship: Interactive Designer / Developer (Imagewest, 2012 )</strong>
                </li>
-
+               
                <li>
                   <strong>Graphic Designer (Spectrum Photography, 2008 - 2009 )</strong>
                </li>

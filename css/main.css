@@ -185,6 +185,8 @@ a.button:hover {
    left:0;
    width:100%;
    max-width:600px;
+   max-height:100%;
+   overflow:scroll;
    padding:2em;
    pointer-events: none;
    opacity:0;
@@ -257,6 +259,10 @@ textarea {
 
 label {
    color:black;
+}
+
+.g-recaptcha {
+   margin-top:1em;
 }
 
 /* ------------------------------------------------------------------------ */

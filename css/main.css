@@ -176,7 +176,6 @@ a.button:hover {
 
 #projects li a {
    display:block;
-   background-color: rgba(255,0,255,0.02);
    border:2px dashed magenta; 
    text-decoration: none;
    transition:border .3s ease, transform .3s ease;

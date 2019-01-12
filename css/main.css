@@ -108,9 +108,8 @@ ul li p {
 }
 
 .bg {
-   opacity:0.1;
    position:absolute;
-   background-size:100% auto;
+   background-size:cover;
    background-repeat: no-repeat;
    right:0;
    bottom:0;
@@ -119,16 +118,11 @@ ul li p {
    z-index:0;
    pointer-events: none;
    overflow:hidden;
+   image-rendering: pixelated;
 }
 
 #bg1 {
-   background-image: url(../img/bg1.png);
-}
-#bg2 {
-   background-image: url(../img/bg2.png);
-}
-#bg3 {
-   background-image: url(../img/bg3.png);
+   background-image: url(../img/bg1.jpg);
 }
 
 .panel {

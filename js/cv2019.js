@@ -20,7 +20,9 @@ function addParallaxListeners() {
 
     if (!ticking) {
       window.requestAnimationFrame(function() {
-        parallaxBg("bg", scrollPosition, -0.2);
+        parallaxBg("bg1", scrollPosition, -0.2);
+        parallaxBg("bg2", scrollPosition, 0.1);
+        parallaxBg("bg3", scrollPosition, -0.4);
         ticking = false;
       });
 

@@ -7,7 +7,7 @@
 }
 
 h1, h2, h3, h4, h5, h6, span, p, a {
-   color:#404040;
+   color:white;
    margin:0;
    padding:0;
 }
@@ -18,7 +18,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 h1 {
-   font-size:1.6em;
+   font-size:64px;
    margin-bottom:8px;
 }
 
@@ -30,8 +30,8 @@ body {
    position:relative;
    margin:0;
    padding:0;
-   color:#404040;
-   background-color: #e4e4e4;
+   color:#f7f7f7;
+   background-color: #161616;
    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
    font-size:16px;
 }
@@ -42,7 +42,7 @@ body {
 
 p {
    line-height:1.7em;
-   color:#666;
+   color:#a3a3a3;
 }
 
 p + p {
@@ -95,6 +95,10 @@ ul li p {
    grid-area: header;
 }
 
+#header a {
+   color:white;
+}
+
 #main {
    position:relative;
    z-index:1;
@@ -103,14 +107,13 @@ ul li p {
    
 }
 
-#bg {
-   opacity:.5;
-   background-image: url(../img/bg_white.png);
-   background-size: cover;
-   background-repeat: repeat;
+.bg {
+   opacity:0.1;
    position:absolute;
-   top:0;
-   left:0;
+   background-size:100% auto;
+   background-repeat: no-repeat;
+   right:0;
+   bottom:0;
    width:100%;
    height:100%;
    z-index:0;
@@ -118,10 +121,26 @@ ul li p {
    overflow:hidden;
 }
 
+#bg1 {
+   background-image: url(../img/bg1.png);
+}
+#bg2 {
+   background-image: url(../img/bg2.png);
+}
+#bg3 {
+   background-image: url(../img/bg3.png);
+}
+
 .panel {
    padding:2em;
+   color:#f7f7f7;
    border: 1px solid #080808;
-   margin-bottom:1em;
+   margin-bottom:2em;
+   background-color: rgba(20,20,20,0.95);
+}
+
+.panel h3 {
+   font-size:32px;
 }
 
 /* ------------------------------------------------------------------------ */
@@ -152,7 +171,7 @@ a.button:hover {
 #projects ul li {
    border:none;
    padding:0;
-   margin-bottom:1em;
+   margin-bottom:2em;
 }
 
 #projects h3 {
@@ -167,6 +186,7 @@ a.button:hover {
    border:2px dashed magenta; 
    text-decoration: none;
    transition:border .3s ease, transform .3s ease;
+   background-color:rgba(250,250,250,0.95);
 }
 
 #projects li a:hover {
@@ -214,8 +234,12 @@ a.button:hover {
    grid-area: form; 
    margin-bottom:2em;
 }
-#contact button { grid-area: submit; }
-#contact #close { grid-area: close; }
+#contact button { 
+   grid-area: submit; 
+}
+#contact #close { 
+   grid-area: close; 
+}
 
 input, textarea {
    width:100%;

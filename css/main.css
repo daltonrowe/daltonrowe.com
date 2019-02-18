@@ -163,9 +163,19 @@ a.button:hover {
 }
 
 #projects ul li {
+   display:block;
    border:none;
    padding:0;
-   margin-bottom:2em;
+   margin-bottom:1.5em;
+   border:2px dashed magenta;
+   margin-left:-.5em;
+   margin-right:.5em; 
+   transition:all .3s ease;
+}
+
+#projects ul li:nth-of-type(even) {
+   margin-left:.5em;
+   margin-right:-.5em;
 }
 
 #projects h3 {
@@ -176,13 +186,11 @@ a.button:hover {
 
 #projects li a {
    display:block;
-   border:2px dashed magenta; 
    text-decoration: none;
-   transition:border .3s ease, transform .3s ease;
    background-color:rgba(250,250,250,0.95);
 }
 
-#projects li a:hover {
+#projects li:hover {
    border-style:dotted;
    transform:translateY(-4px);
 }

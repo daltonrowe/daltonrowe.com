@@ -167,7 +167,9 @@ a.button:hover {
    border:none;
    padding:0;
    margin-bottom:1.5em;
-   border:2px dashed magenta;
+   /* border:2px dashed magenta; */
+   border-radius:16px;
+   overflow:hidden;
    margin-left:-.5em;
    margin-right:.5em; 
    transition:all .3s ease;
@@ -191,7 +193,7 @@ a.button:hover {
 }
 
 #projects li:hover {
-   border-style:dotted;
+   /* border-style:dotted; */
    transform:translateY(-4px);
 }
 

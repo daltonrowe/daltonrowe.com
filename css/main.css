@@ -61,9 +61,14 @@ ul li {
 /* ------------------------------------------------------------------------ */
 
 #header {
+  position:fixed;
+  top:0;
+  left:0;
   margin-bottom: 2em;
   display:flex;
   align-items:center;
+  padding:1em;
+  z-index:999;
 }
 
 #header h1 {
@@ -77,8 +82,13 @@ ul li {
   margin-left: 14px;
 }
 
+#icons {
+  display:flex;
+}
+
 #main {
   padding: 1em;
+  margin-top:50px;
 }
 
 #projects ul {
@@ -109,3 +119,11 @@ ul li {
   font-size:12px;
 }
 
+footer {
+  padding:1em;
+}
+
+footer .no-tracking {
+  font-size: 8px;
+  opacity:.6;
+}

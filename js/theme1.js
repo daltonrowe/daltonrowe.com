@@ -1,11 +1,10 @@
 // no styles
 
-// const allStyles = document.querySelectorAll('link[rel="stylesheet"]');
+console.log("Theme 1:", "The document web to keep you honest");
 
-// console.log("no styles", allStyles);
+const allStyles = document.querySelectorAll('link[rel="stylesheet"]');
 
-// for (let i = 0; i < allStyles.length; i++) {
-//   const style = allStyles[i];
-//   console.log("remove:", style);
-//   style.remove();
-// }
+for (let i = 0; i < allStyles.length; i++) {
+  const style = allStyles[i];
+  style.remove();
+}

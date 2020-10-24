@@ -1,0 +1,53 @@
+* {
+  display:block;
+  border:1px solid grey;
+  padding:10px;
+  color:white;
+}
+
+*::before,
+*::after {
+  color:white;
+  font-size:12px;
+}
+
+head::before {
+  content: 'Document Head';
+}
+
+body::before {
+  content: 'Document Body';
+}
+
+main::before {
+  content: 'Document Main';
+}
+
+meta::after {
+  content: 'Meta Tag';
+}
+
+link[rel=icon]::after {
+  content: 'Favicon';
+}
+
+link[rel=stylesheet]::after {
+  content: 'Stylesheet';
+}
+
+script::after {
+  content: 'Script';
+}
+
+#header {
+  position:static;
+  margin:0;
+}
+
+#main {
+  margin:0;
+}
+
+svg {
+  padding:0;
+}

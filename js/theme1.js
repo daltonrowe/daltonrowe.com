@@ -1,6 +1,6 @@
 // no styles
 
-console.log("Theme 1:", "The document web to keep you honest");
+console.log("1:", "The document web to keep you honest");
 
 const allStyles = document.querySelectorAll('link[rel="stylesheet"]');
 

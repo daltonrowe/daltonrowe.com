@@ -13,6 +13,10 @@
   flex:0 1 19%;
 }
 
+.forecast-day--night-only {
+  background: black;
+}
+
 @media screen and (max-width:1000px) {
   .forecast-wrapper {
     overflow-x: scroll;
@@ -30,6 +34,11 @@
   margin:0 auto;
   padding:20px;
   height:330px;
+}
+
+.forecast-day--night-only .forecast-section {
+  height:700px;
+  padding-top:200px;
 }
 
 .forecast-section--day {

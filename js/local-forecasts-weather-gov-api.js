@@ -5,8 +5,24 @@ class ForecastFetcher {
     host: "https://api.weather.gov/",
   };
 
-  defaultDayRenderer = (forecastDay) => {
+  dayRenderer = (forecastDay) => {
     const { day, night } = forecastDay;
+
+    if (night && !day) {
+      return `
+<div class="forecast-day forecast-day--night-only">          
+  <div class="forecast-section forecast-section--night">
+    <strong class="forecast-section__name">${night.name}</strong>
+    <img class="forecast-section__icon" src="${night.icon}" alt="${night.shortForecast}">
+    
+    <div class="forecast-section__temp">${night.temperature}&deg; ${night.temperatureUnit}</div>
+    <div class="forecast-section__short">${night.shortForecast}</div>
+
+    <div class="forecast-section__wind">Wind: ${night.windSpeed} ${night.windDirection}</div>
+  </div>
+</div>
+          `;
+    }
 
     return `
 <div class="forecast-day">    
@@ -33,9 +49,7 @@ class ForecastFetcher {
     `;
   };
 
-  defaultWrapRenderer = (forecast, forecastMarkup) => {
-    console.log(forecast);
-
+  wrapRenderer = (forecast, forecastMarkup) => {
     return ` 
 <div class="forecast-wrapper">
   ${forecastMarkup}
@@ -76,32 +90,31 @@ class ForecastFetcher {
     return await this.lookupForecast(cwa, gridX, gridY);
   };
 
-  // manipulate html strings, or let use do it
-  markupForecast = (forecast, templateRenderer = null) => {
+  // manipulate html strings, or let user do it
+  markupForecast = (forecast) => {
     let forecastMarkup = "";
-    const dayRenderer =
-      templateRenderer && templateRenderer.dayRenderer
-        ? templateRenderer.dayRenderer
-        : this.defaultDayRenderer;
-
-    const wrapRenderer =
-      templateRenderer && templateRenderer.wrapRenderer
-        ? templateRenderer.wrapRenderer
-        : this.defaultWrapRenderer;
-
     const { periods } = forecast.properties;
 
-    for (let i = 0; i < this.config.maxDays * 2; i += 2) {
+    let offset = 0;
+    let maxDays = this.config.maxDays;
+
+    if (!periods[0].isDaytime) {
+      offset = 1;
+      maxDays -= 1;
+      forecastMarkup += this.dayRenderer({ night: periods[0] });
+    }
+
+    for (let i = offset; i < maxDays * 2; i += 2) {
       const forecastDay = {
         day: periods[i],
         night: periods[i + 1],
       };
 
-      forecastMarkup += dayRenderer(forecastDay);
+      forecastMarkup += this.dayRenderer(forecastDay);
     }
 
     const forecastWrapper = document.createElement("DIV");
-    forecastWrapper.innerHTML = wrapRenderer(forecast, forecastMarkup);
+    forecastWrapper.innerHTML = this.wrapRenderer(forecast, forecastMarkup);
     return forecastWrapper;
   };
 }

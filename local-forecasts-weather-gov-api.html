@@ -16,7 +16,7 @@
     </header>
 
     <main id="main">
-      <p>The US National Weather Service and weather.gov is an amazing resource, and has an easy to use, well documented API. I really appreciate public resources like these, some I decided to document and expand on their examples with by own process in the browser.</p>
+      <p>The US National Weather Service and weather.gov is an amazing resource, and has an easy to use, well documented API. I really appreciate public resources like these and want to rework an old script of mine, so I decided to document and expand on their examples with by own process in the browser.</p>
       <p class="gap-bottom">Alrighty, let's <em>fetch a forecast for a given latitude and longitude</em>!</p>
 
       <a class="button" href="js/local-forecasts-weather-gov-api.js" target="_blank">View Source</a>
@@ -114,8 +114,90 @@ lookupForecast = async (office, gridX, gridY) => {
   return this.useNWS(`gridpoints/${office}/${gridX},${gridY}/forecast`);
 };</pre>
 
+      <h2 class="gap-top">Business Logic</h2>
+
+      <p>Now let's take what we have, and turn it into what we need. In a highly used situation you would want to persist data from the first endpoint, but for now let's make a function to combine our class's abilities:</p>
+
+      <pre>
+// combine point and forecast lookups
+lookupForecastForLatLng = async (lat, lng) => {
+  const point = await this.lookupPoint(lat, lng);
+  const { cwa, gridX, gridY } = point.properties;
+
+  return await this.lookupForecast(cwa, gridX, gridY);
+};</pre>
+
+      <h2 class="gap-top">Parsing the forecast</h2>
+
+      <p>The <em>properties</em> key of the response json contains an array of forecasts called <em>periods</em>. We need to loop over these and construct a forecast. There are different ways to do this but a quick and dirty innerHTML suits my current needs.</p>
+      <p>There's a small catch, sometimes the first item is the current night! We'll need to handle that edge case.</p>
+
+      <pre>
+// manipulate html strings, or let user do it
+markupForecast = (forecast) => {
+  let forecastMarkup = "";
+  const { periods } = forecast.properties;
+
+  let offset = 0;
+  let maxDays = this.config.maxDays;
+
+  if (!periods[0].isDaytime) {
+    offset = 1;
+    maxDays -= 1;
+    forecastMarkup += this.dayRenderer({ night: periods[0] });
+  }
+
+  for (let i = offset; i < maxDays * 2; i += 2) {
+    const forecastDay = {
+      day: periods[i],
+      night: periods[i + 1],
+    };
+
+    forecastMarkup += this.dayRenderer(forecastDay);
+  }
+
+  const forecastWrapper = document.createElement("DIV");
+  forecastWrapper.innerHTML = this.wrapRenderer(forecast, forecastMarkup);
+  return forecastWrapper;
+};</pre>
+
+      <h2 class="gap-top">Templating</h2>
+
+      <p>Before the markup is inserted into the DOM, it much first be collected by our templating functions. We'll use template literals (``) and a single argument passed as an object to make this highly flexible.</p>
+      <p>See <em>dayRenderer</em>, and <em>wrapRenderer</em> in the source.</p>
+
+      <a class="button" href="js/local-forecasts-weather-gov-api.js" target="_blank">View Source</a>
+
+      <h2 class="gap-top">And... Done!</h2>
+
+      <p>Our final function returns a element ready to DOM inseration. See the bottom of the script for our new tool at use!</p>
+
+      <pre>
+        // Abbreviated
+
+        (async () => {
+          const demo = document.querySelector("#demo");
+
+          // instantiate the class with our config
+          const fetcher = new ForecastFetcher({
+            maxDays: 5,
+          });
+
+          // Lookup forecast for lat and lng
+          const forecast = await fetcher.lookupForecastForLatLng(39.7456, -97.0892);
+
+          // mark it up and stick it in the DOM
+          const forecastNode = fetcher.markupForecast(forecast);
+          demo.appendChild(forecastNode);
+        })();
+        
+      </pre>
+
+      <p>Thanks for reading!</p>
+
+
       <h3 class="gap-top">Note</h3>
-      <p>I honestly didn't expect this to be so simple. This all started with wanting to renovate an old hairy and scary jQuery script I'd wrote that parsed XML layouts from a totally different API. It worked at the time but I couldn't bring that cruft forward.</p>
+      <p>This all started with wanting to renovate an old hairy and scary jQuery script I'd wrote that parsed XML layouts from  different API. It worked at the time but I couldn't bring that cruft forward.</p>
       <p>I had no ideas these endpoints existed at the time, and it just goes to show there's always one more article to read. Thanks to everyone whose work made this API public and so easy to use!</p>
     </main>
 

@@ -1,84 +1,115 @@
 :root {
-  --accent-color:#f7df1e;
+  --accent-color: #f7df1e;
+  --em-color: #aaa;
 }
 
 body {
-  margin:0 auto;
+  margin: 0 auto;
 }
 
 #header {
-  position:static;
-  margin-bottom:20px;
-  display:block;
-  max-width:600px;
-  margin:0 auto;
-  padding:40px 0;
+  position: static;
+  margin-bottom: 20px;
+  display: block;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 0;
 }
 
 #header h1 {
   line-height: 38px;
 }
 
+@media screen and (min-width: 1000px) {
+  #header h1 {
+    font-size: 64px;
+    line-height: 1em;
+    color: var(--accent-color);
+  }
+}
+
 #main {
-  margin-top:0px;
+  margin-top: 0px;
 }
 
 .button {
-  border:1px solid white;
-  padding:10px;
-  padding-bottom:8px;
+  border: 1px solid white;
+  padding: 10px;
+  padding-bottom: 8px;
 
-  max-width:600px;
-  margin:0 auto 20px auto;
+  max-width: 600px;
+  margin: 0 auto 20px auto;
 }
 
 .button.em {
-  border:1px dashed var(--accent-color)
+  border: 1px dashed var(--accent-color);
 }
 
 .gap-top {
-  margin-top:100px;
+  margin-top: 100px;
 }
 
 .gap-bottom {
-  margin-bottom:60px;
+  margin-bottom: 60px;
 }
 
-h2, h3 {
-  max-width:600px;
-  margin:0 auto 20px auto;
+h2,
+h3 {
+  max-width: 600px;
+  margin: 0 auto 20px auto;
 }
 
 h2 {
-  border-bottom:2px solid var(--accent-color);
+  border-bottom: 2px solid var(--accent-color);
 }
 
 h3 {
-  color:#ddd;
+  position: relative;
+  color: #ddd;
+  padding-left: 20px;
+}
+
+h3::after {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  content: " ";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-color);
 }
 
 pre {
-  background:#eee;
-  padding:20px;
+  background: #322;
+  padding: 20px;
   font-size: 12px;
-  max-width:900px;
-  margin:0 auto 20px auto;
+  max-width: 900px;
+  margin: 0 auto 20px auto;
   overflow-x: scroll;
+  color: #eed;
 }
 
 p {
-  max-width:600px;
-  margin:0 auto 20px auto;
+  line-height: 1.7em;
+  max-width: 600px;
+  margin: 0 auto 20px auto;
 }
 
 p a {
-  display:inline;
+  display: inline;
   text-decoration: underline;
 }
 
 p em {
-  border:1px dashed var(--accent-color);
-  padding:2px 3px;
-  font-weight: bold;
-  font-style: normal;
+  border-bottom: 1px solid var(--em-color);
+  color: var(--accent-color);
+  padding: 2px 3px;
+  font-weight: normal;
+  font-style: italic;
+}
+
+img {
+  max-width: 900px;
+  margin: 0 auto;
 }

@@ -30,7 +30,7 @@ body {
 }
 
 a {
-  display:block;
+  display: block;
   text-decoration: none;
 }
 
@@ -51,9 +51,9 @@ ul {
 }
 
 ul li {
-  display:block;
+  display: block;
   margin-bottom: 1em;
-  padding:0;
+  padding: 0;
 }
 
 /* ------------------------------------------------------------------------ */
@@ -61,13 +61,13 @@ ul li {
 /* ------------------------------------------------------------------------ */
 
 #header {
-  position:fixed;
-  top:0;
-  left:0;
-  display:flex;
-  align-items:center;
-  padding:1em;
-  z-index:999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  padding: 1em;
+  z-index: 999;
 }
 
 #header h1 {
@@ -76,8 +76,8 @@ ul li {
 }
 
 #icons {
-  display:flex;
-  padding-bottom:8px;
+  display: flex;
+  padding-bottom: 8px;
 }
 
 #icons a {
@@ -88,9 +88,14 @@ ul li {
   font-size: 18px;
 }
 
+#icons a.resume {
+  margin-top: 2px;
+  font-size: 16px;
+}
+
 #main {
   padding: 1em;
-  margin-top:50px;
+  margin-top: 50px;
 }
 
 #projects ul {
@@ -103,35 +108,34 @@ ul li {
   overflow: hidden;
   flex: 0 0 140px;
   transition: all 0.1s ease;
-  margin-right:10px;
-  margin-bottom:10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 #projects ul li img {
-  display:block;
-  width:140px;
-  height:140px;
+  display: block;
+  width: 140px;
+  height: 140px;
   object-fit: cover;
   object-position: center center;
-  margin-bottom:10px;
+  margin-bottom: 10px;
 }
 
 #projects ul li h2 {
   font-weight: normal;
-  font-size:12px;
+  font-size: 12px;
 }
 
 #projects ul li h3 {
   font-weight: normal;
-  font-size:10px;
+  font-size: 10px;
 }
 
-
 footer {
-  padding:1em;
+  padding: 1em;
 }
 
 footer .no-tracking {
   font-size: 8px;
-  opacity:.6;
+  opacity: 0.6;
 }

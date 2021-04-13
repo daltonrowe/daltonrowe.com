@@ -119,6 +119,7 @@ ul li {
   object-fit: cover;
   object-position: center center;
   margin-bottom: 10px;
+  background: #333;
 }
 
 #projects ul li h2 {

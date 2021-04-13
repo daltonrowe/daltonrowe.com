@@ -109,7 +109,26 @@ p em {
   font-style: italic;
 }
 
-img {
+img,
+video {
+  display: block;
   max-width: 900px;
   margin: 0 auto;
+}
+
+ul {
+  display: block;
+  color: white;
+  width: 600px;
+  margin: 0 auto;
+}
+
+ul li {
+  padding: 16px;
+  border: 1px solid #444;
+}
+
+.back {
+  font-size: 14px;
+  margin-bottom: 50px;
 }

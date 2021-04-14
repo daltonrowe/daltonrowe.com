@@ -1,0 +1,32 @@
+.resume-card span,
+.resume-card strong {
+  display: block;
+}
+
+.resume-card li {
+  display: block;
+}
+
+.resume-card strong {
+  margin-bottom: 10px;
+}
+
+.resume-card span {
+  display: inline-block;
+  font-size: 14px;
+}
+
+.resume-card span:nth-of-type(1) {
+  font-style: italic;
+  margin-right: 16px;
+  color: var(--accent-color);
+}
+
+.resume-card span:nth-of-type(2) {
+  color: #888;
+}
+
+ul.short-list li {
+  display: inline-block;
+  margin-bottom: 5px;
+}

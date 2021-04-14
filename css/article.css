@@ -128,11 +128,18 @@ ul {
   width: 600px;
   max-width: 100%;
   margin: 0 auto;
+  font-size: 14px;
 }
 
 ul li {
   padding: 16px;
   border: 1px solid #444;
+}
+
+@media screen and (min-width: 1000px) {
+  ul {
+    font-size: 16px;
+  }
 }
 
 .back {

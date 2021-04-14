@@ -107,7 +107,6 @@ ul li {
 }
 
 #projects ul li {
-  overflow: hidden;
   flex: 0 0 140px;
   transition: all 0.1s ease;
   margin-right: 10px;
@@ -115,15 +114,15 @@ ul li {
 }
 
 #projects ul li a img {
-  transition: border-radius 0.1s ease;
+  transition: transform 0.1s ease;
 }
 
 #projects ul li a:hover img {
-  border-radius: 10%;
+  transform: translateY(-7px);
 }
 
 #projects ul li a[target="_blank"]:hover img {
-  border-radius: 0px;
+  transform: translateY(0);
 }
 
 #projects ul li img {

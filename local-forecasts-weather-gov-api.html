@@ -265,24 +265,23 @@ markupForecast = (forecast) => {
       </p>
 
       <pre>
-        // Abbreviated
+// Abbreviated
 
-        (async () => {
-          const demo = document.querySelector("#demo");
+(async () => {
+  const demo = document.querySelector("#demo");
 
-          // instantiate the class with our config
-          const fetcher = new ForecastFetcher({
-            maxDays: 5,
-          });
+  // instantiate the class with our config
+  const fetcher = new ForecastFetcher({
+    maxDays: 5,
+  });
 
-          // Lookup forecast for lat and lng
-          const forecast = await fetcher.lookupForecastForLatLng(39.7456, -97.0892);
+  // Lookup forecast for lat and lng
+  const forecast = await fetcher.lookupForecastForLatLng(39.7456, -97.0892);
 
-          // mark it up and stick it in the DOM
-          const forecastNode = fetcher.markupForecast(forecast);
-          demo.appendChild(forecastNode);
-        })();
-        
+  // mark it up and stick it in the DOM
+  const forecastNode = fetcher.markupForecast(forecast);
+  demo.appendChild(forecastNode);
+})();
       </pre>
 
       <p>Thanks for reading!</p>

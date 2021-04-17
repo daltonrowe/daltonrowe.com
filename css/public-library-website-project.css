@@ -257,22 +257,25 @@ video {
   margin: 0 auto;
 }
 
-ul {
+ul,
+ol {
   display: block;
-  color: white;
+  color: #222;
   width: 600px;
   max-width: 100%;
   margin: 0 auto;
   font-size: 14px;
 }
 
-ul li {
+ul li,
+ol li {
   padding: 16px;
   border: 1px solid #444;
 }
 
 @media screen and (min-width: 1000px) {
-  ul {
+  ul,
+  ol {
     font-size: 16px;
   }
 }

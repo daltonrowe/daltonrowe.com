@@ -30,3 +30,27 @@ ul.short-list li {
   display: inline-block;
   margin-bottom: 5px;
 }
+
+@media print {
+  #header {
+    padding:0;
+  }
+  
+  ul.resume-card li {
+    padding:0;
+    border:none;
+  }
+
+  ul.short-list li {
+    padding:0 18px 10px 0;
+    border:none;
+  }
+
+  .back {
+    display:none
+  }
+
+  .page-break {
+    page-break-after: always;
+  }
+}

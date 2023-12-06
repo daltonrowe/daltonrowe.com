@@ -37,21 +37,21 @@ ul.short-list li {
 
 @media print {
   #header {
-    padding:0 0 40px 0;
+    padding: 0 0 40px 0;
   }
-  
+
   ul.resume-card li {
-    padding:0;
-    border:none;
+    padding: 0;
+    border: none;
   }
 
   ul.short-list li {
-    padding:0 18px 10px 0;
-    border:none;
+    padding: 0 18px 10px 0;
+    border: none;
   }
 
   .back {
-    display:none
+    display: none;
   }
 
   .page-break {

@@ -1,0 +1,113 @@
+html {
+  background: black;
+}
+
+body {
+  padding: 90px 0;
+  background: linear-gradient(
+      110deg,
+      rgba(200, 0, 0, 0.1),
+      rgba(20, 20, 20, 0) 65%
+    ),
+    linear-gradient(200deg, rgba(0, 200, 0, 0.1), rgba(20, 20, 20, 0) 65%),
+    linear-gradient(-30deg, rgba(200, 0, 0, 0.1), rgba(20, 20, 20, 0) 65%);
+}
+
+#main {
+  margin: 0 auto;
+}
+
+#why {
+  flex: 0 0 100%;
+  display: block !important;
+  font-size: 10px;
+  text-align: center;
+  opacity: 0.3;
+  margin-bottom: 100px;
+}
+
+#why span {
+  display: block;
+}
+
+#projects ul {
+  display: grid;
+  width: 920px;
+  grid-template-columns: repeat(3, 300px);
+  gap: 10px;
+  grid-auto-rows: 300px;
+  justify-items: center;
+  margin: 0 auto;
+}
+
+#projects ul li {
+  margin: 0;
+}
+
+#projects ul li a {
+  width: 300px;
+  height: 300px;
+  border-radius: 2px;
+}
+#projects ul li a img {
+  animation-name: pulse;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate-reverse;
+  opacity: 0.1;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.1;
+    background: red;
+  }
+  to {
+    opacity: 0.4;
+    background: green;
+  }
+}
+
+#projects ul li a:hover img {
+  opacity: 0.4;
+}
+
+.effect-2 {
+  transform: rotate(90deg) translateY(-40px);
+}
+
+.effect-3 {
+  transform: rotate(140deg) rotate3d(0, 0.2, -0.2, -8deg);
+}
+
+.effect-4 {
+  transform: rotate(34deg) translateX(-60px);
+}
+
+.effect-2 {
+  transform: rotate(90deg) rotate3d(0, 0.2, 0.2, 10deg);
+}
+
+#projects ul li.effect-2 a {
+  border-style: dotted;
+}
+
+.effect-3 {
+  transform: rotate(300deg) translateX(-40px);
+}
+
+.effect-4 {
+  transform: rotate(200deg) translateX(40px);
+}
+
+#projects ul li.effect-4 a {
+  border-style: dashed;
+}
+
+.effect-5 {
+  transform: rotate(60deg) translateX(-40px);
+}
+
+.effect-6 {
+  transform: rotate(-40deg) rotate3d(0, 0.1, 0.2, 30deg);
+}

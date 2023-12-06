@@ -22,29 +22,11 @@ a {
 }
 
 #header {
-  position: static;
+  display: flex;
+  flex-direction: column;
   margin-bottom: 20px;
-  display: block;
-  max-width: 600px;
   margin: 0 auto;
   padding: 40px 20px;
-}
-
-#header h1 {
-  line-height: 38px;
-  color: var(--accent-color);
-}
-
-@media screen and (min-width: 1000px) {
-  #header {
-    padding: 40px 0;
-    background: transparent;
-  }
-
-  #header h1 {
-    font-size: 64px;
-    line-height: 1em;
-  }
 }
 
 #main {
@@ -121,7 +103,6 @@ p a {
 }
 
 p em {
-  border-bottom: 1px solid var(--em-color);
   color: var(--accent-color);
   padding: 2px 3px;
   font-weight: normal;

@@ -2,6 +2,12 @@
 /* Reset */
 /* ------------------------------------------------------------------------ */
 
+:root {
+  --accent-color: #f7be2c;
+  --em-color: #aaa;
+  --project-color: #666;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -61,25 +67,31 @@ ul li {
 /* ------------------------------------------------------------------------ */
 
 #header {
-  position: fixed;
-  top: 0;
-  left: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   padding: 1em 1em 0.25em 1em;
   width: 100%;
   z-index: 999;
-  background: rgba(20, 20, 20, 0.9);
 }
 
 #header h1 {
+  line-height: 38px;
+  color: var(--accent-color);
   font-size: 30px;
-  line-height: 30px;
+}
+
+@media screen and (min-width: 1000px) {
+  #header h1 {
+    font-size: 64px;
+    line-height: 1em;
+  }
 }
 
 #icons {
   display: flex;
   padding-bottom: 8px;
+  margin-top: 20px;
 }
 
 #icons a {
@@ -97,57 +109,6 @@ ul li {
 
 #main {
   padding: 1em;
-  margin-top: 50px;
-}
-
-#projects ul {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-#projects ul li {
-  flex: 0 0 140px;
-  transition: all 0.1s ease;
-  margin-right: 10px;
-  margin-bottom: 10px;
-}
-
-#projects ul li a img {
-  transition: transform 0.1s ease;
-}
-
-#projects ul li a:hover img {
-  transform: translateY(-7px);
-}
-
-#projects ul li a[target="_blank"]:hover img {
-  transform: translateY(0);
-}
-
-#projects ul li a[href$="#no-article-yet"]:hover img {
-  transform: translateY(0);
-}
-
-#projects ul li img {
-  display: block;
-  width: 140px;
-  height: 140px;
-  object-fit: cover;
-  object-position: center center;
-  margin-bottom: 10px;
-  background: #333;
-}
-
-#projects ul li h2 {
-  font-weight: normal;
-  font-size: 12px;
-}
-
-#projects ul li h3 {
-  font-weight: normal;
-  font-size: 10px;
-  opacity: 0.65;
 }
 
 footer {

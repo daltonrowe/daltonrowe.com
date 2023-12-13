@@ -1,29 +1,12 @@
-/* ------------------------------------------------------------------------ */
-/* Reset */
-/* ------------------------------------------------------------------------ */
-
-* {
-  box-sizing: border-box;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-span,
-p,
-a {
-  color: white;
-  margin: 0;
-  padding: 0;
+:root {
+  --accent-color: #407ee3;
+  --em-color: #aaa;
 }
 
 body {
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
-  background-color: #161616;
+  background-color: #eee;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 16px;
@@ -75,6 +58,7 @@ ul li {
 #header h1 {
   font-size: 30px;
   line-height: 30px;
+  margin: 0;
 }
 
 #icons {
@@ -147,7 +131,6 @@ ul li {
 #projects ul li h3 {
   font-weight: normal;
   font-size: 10px;
-  opacity: 0.65;
 }
 
 footer {
@@ -157,4 +140,147 @@ footer {
 footer .no-tracking {
   font-size: 8px;
   opacity: 0.6;
+}
+
+#header {
+  position: static;
+  margin-bottom: 20px;
+  display: block;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+#header h1 {
+  line-height: 38px;
+  color: var(--accent-color);
+}
+
+@media screen and (min-width: 1000px) {
+  #header {
+    padding: 40px 0;
+    background: transparent;
+  }
+
+  #header h1 {
+    font-size: 64px;
+    line-height: 1em;
+  }
+}
+
+#main {
+  margin-top: 0px;
+}
+
+.button {
+  border: 1px solid white;
+  padding: 10px;
+  padding-bottom: 8px;
+
+  max-width: 600px;
+  margin: 0 auto 20px auto;
+}
+
+.button.em {
+  border: 1px dashed var(--accent-color);
+}
+
+.gap-top {
+  margin-top: 100px;
+}
+
+.gap-bottom {
+  margin-bottom: 60px;
+}
+
+h2,
+h3 {
+  max-width: 600px;
+  margin: 0 auto 20px auto;
+}
+
+h2 {
+  border-bottom: 2px solid var(--accent-color);
+}
+
+h3 {
+  position: relative;
+  color: #ddd;
+  padding-left: 20px;
+}
+
+h3::after {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  content: " ";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-color);
+}
+
+pre {
+  background: #322;
+  padding: 20px;
+  font-size: 12px;
+  max-width: 800px;
+  margin: 0 auto 20px auto;
+  overflow-x: scroll;
+  color: #eed;
+}
+
+p {
+  line-height: 1.7em;
+  max-width: 600px;
+  margin: 0 auto 20px auto;
+}
+
+p a {
+  display: inline;
+  text-decoration: underline;
+}
+
+p em {
+  border-bottom: 1px solid var(--em-color);
+  color: var(--accent-color);
+  padding: 2px 3px;
+  font-weight: normal;
+  font-style: italic;
+}
+
+img,
+video {
+  display: block;
+  width: 800px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+ul,
+ol {
+  display: block;
+  color: #222;
+  width: 600px;
+  max-width: 100%;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+ul li,
+ol li {
+  padding: 16px;
+  border: 1px solid #444;
+}
+
+@media screen and (min-width: 1000px) {
+  ul,
+  ol {
+    font-size: 16px;
+  }
+}
+
+.back {
+  font-size: 14px;
+  margin-bottom: 50px;
 }

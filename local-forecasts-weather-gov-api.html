@@ -1,0 +1,306 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Local forecasts with Weather.gov API</title>
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/article.css" />
+    <link rel="stylesheet" href="./css/local-forecasts-weather-gov-api.css" />
+
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <header id="header">
+      <a class="back" href="/">← Back</a>
+      <h1>Local forecasts with the weather.gov API</h1>
+      <span class="subtitle">Javascript | 2020 | Level: Beginner</span>
+    </header>
+
+    <main id="main">
+      <h2>The API has since changed since writing this article, and the demo no longer works. But this should still give absolute beginners some tips and ideas for working with APIs.</h2>
+
+      <p>
+        The US National Weather Service and weather.gov is an amazing resource,
+        and has an easy to use, well documented API. I really appreciate public
+        resources like these and want to rework an old script of mine, so I
+        decided to document and expand on their examples with by own.
+      </p>
+      <p class="gap-bottom">
+        Alrighty, let's
+        <em>fetch a forecast for a given latitude and longitude</em>!
+      </p>
+
+      <a
+        class="button"
+        href="js/local-forecasts-weather-gov-api.js"
+        target="_blank"
+        >View Source</a
+      >
+      <a id="demo-button" class="button em" href="#">Run Demo</a>
+      <div id="demo"></div>
+
+      <h2 id="learning-api" class="gap-top">Learning about the API</h2>
+
+      <p class="gap-bottom">
+        The first step, but not so flashy step is fiddling with and learning
+        about the API.
+      </p>
+
+      <h3>Documentation</h3>
+      <a
+        class="button"
+        href="https://www.weather.gov/documentation/services-web-api"
+        >NWS API Web Service Documentation</a
+      >
+      <a class="button" href="https://api.weather.gov/openapi.json"
+        >Open API Documentation Endpoint</a
+      >
+      <p class="gap-bottom">Looks great! Everything we need to be dangerous.</p>
+
+      <h3>Accessing forecast data</h3>
+      <p>Here we find the implementation details need to reach our goal.</p>
+      <p>
+        In the
+        <a href="https://www.weather.gov/documentation/services-web-api"
+          >Examples</a
+        >
+        section of the generously provided official docs, we learn that
+        forecasts are provided by an <em>office</em> for a given set of
+        <em>grid coordinates</em>.
+      </p>
+      <pre>
+https://api.weather.gov/gridpoints/{office}/{grid X},{grid Y}/forecast</pre
+      >
+      <p>
+        The examples even go on to show how to collect that info from a given
+        <em>point</em>!
+      </p>
+      <pre>https://api.weather.gov/points/{latitude},{longitude}</pre>
+
+      <p>
+        From looking at sample forecast, we've got an array of objects to make
+        up our forecast. Right on.
+      </p>
+      <pre>
+{
+  "number": 4,
+  "name": "Monday",
+  "startTime": "2020-10-26T06:00:00-05:00",
+  "endTime": "2020-10-26T18:00:00-05:00",
+  "isDaytime": true,
+  "temperature": 26,
+  "temperatureUnit": "F",
+  "temperatureTrend": null,
+  "windSpeed": "10 to 15 mph",
+  "windDirection": "N",
+  "icon": "https://api.weather.gov/icons/land/day/snow,70/snow,50?size=medium",
+  "shortForecast": "Light Snow Likely",
+  "detailedForecast": "Snow likely. Mostly cloudy, with a high near 26. North wind 10 to 15 mph, with gusts as high as 25 mph. Chance of precipitation is 70%. New snow accumulation of 1 to 3 inches possible."
+}</pre
+      >
+
+      <h3>User Agent</h3>
+      <p>
+        weather.gov wants us to use an User Agent to identify ourselves, however
+        as of writing that isn't
+        <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=571722"
+          >supported in all browsers.</a
+        >
+      </p>
+
+      <h2 class="gap-top">Planning</h2>
+      <p>Now with some information in hand, let's state what we want to do:</p>
+
+      <p>
+        For a given <em>latitude</em> and <em>longitude</em>, use the NWS API to
+        make a <em>5 day forecast</em> like you might see on TV.
+      </p>
+
+      <p>
+        I'm going to use a class with ES modules to organize and execute our
+        code, but keep it fairly functional in case I need to reuse it in the
+        future.
+      </p>
+      <p>
+        With our goal, and some knowledge of the API in hand let's sketch out
+        the code:
+      </p>
+
+      <pre>
+export class ForecastFetcher {
+  // set defaults, merge user config in constructor
+
+  // fetch data via the nws api
+
+  // lookup and provide point 
+
+  // lookup and provide forecast
+
+  // combine point and forecast lookups
+
+  // prepare forecast days and render template
+}</pre
+      >
+
+      <h2 id="fetching" class="gap-top">Fetching data</h2>
+
+      <p>
+        We've gotta get the data from the API so let's setup a tool to query it.
+        We're going to use a super simple
+        <a
+          href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch"
+          target="_blank"
+          >fetch</a
+        >
+        with the GET method.
+      </p>
+      <p>This will definitely happen more than once, so let's abstract it.</p>
+
+      <pre>
+// fetch data via the nws api
+useNWS = async (route) => {
+  const response = await fetch(`${this.config.host}${route}`, {
+    method: "GET",
+  });
+
+  return response.json();
+};</pre
+      >
+
+      <p>Now we can make functions to request data from our two endpoints:</p>
+
+      <pre>
+// lookup and provide point information
+lookupPoint = async (lat, lng) => {
+  return this.useNWS(`points/${lat},${lng}`);
+};
+
+// lookup and provide forecast info
+lookupForecast = async (office, gridX, gridY) => {
+  return this.useNWS(`gridpoints/${office}/${gridX},${gridY}/forecast`);
+};</pre
+      >
+
+      <h2 class="gap-top">Business Logic</h2>
+
+      <p>
+        Now let's take what we have, and turn it into what we need. In a highly
+        used situation you would want to persist data from the first endpoint,
+        but for now let's make a function to combine our class's abilities:
+      </p>
+
+      <pre>
+// combine point and forecast lookups
+lookupForecastForLatLng = async (lat, lng) => {
+  const point = await this.lookupPoint(lat, lng);
+  const { cwa, gridX, gridY } = point.properties;
+
+  return await this.lookupForecast(cwa, gridX, gridY);
+};</pre
+      >
+
+      <h2 class="gap-top">Parsing the forecast</h2>
+
+      <p>
+        The <em>properties</em> key of the response json contains an array of
+        forecasts called <em>periods</em>. We need to loop over these and
+        construct a forecast. There are different ways to do this but a quick
+        and dirty innerHTML suits my current needs.
+      </p>
+      <p>
+        There's a small catch,
+        <em>sometimes the first item is the current night!</em>
+        We'll need to handle that edge case.
+      </p>
+
+      <pre>
+// manipulate html strings, or let user do it
+markupForecast = (forecast) => {
+  let forecastMarkup = "";
+  const { periods } = forecast.properties;
+
+  let offset = 0;
+  let maxDays = this.config.maxDays;
+
+  if (!periods[0].isDaytime) {
+    offset = 1;
+    maxDays -= 1;
+    forecastMarkup += this.dayRenderer({ night: periods[0] });
+  }
+
+  for (let i = offset; i < maxDays * 2; i += 2) {
+    const forecastDay = {
+      day: periods[i],
+      night: periods[i + 1],
+    };
+
+    forecastMarkup += this.dayRenderer(forecastDay);
+  }
+
+  const forecastWrapper = document.createElement("DIV");
+  forecastWrapper.innerHTML = this.wrapRenderer(forecast, forecastMarkup);
+  return forecastWrapper;
+};</pre
+      >
+
+      <h2 class="gap-top">Templating</h2>
+
+      <p>
+        Before the markup is inserted into the DOM, it much first be collected
+        by our templating functions. We'll use template literals (``) and a
+        single argument passed as an object to make this highly flexible.
+      </p>
+      <p>See <em>dayRenderer</em>, and <em>wrapRenderer</em> in the source.</p>
+
+      <a
+        class="button"
+        href="js/local-forecasts-weather-gov-api.js"
+        target="_blank"
+        >View Source</a
+      >
+
+      <h2 class="gap-top">And... Done!</h2>
+
+      <p>
+        Our final function returns a element ready to DOM inseration. See the
+        bottom of the script for our new tool at use!
+      </p>
+
+      <pre>
+// Abbreviated
+
+(async () => {
+  const demo = document.querySelector("#demo");
+
+  // instantiate the class with our config
+  const fetcher = new ForecastFetcher({
+    maxDays: 5,
+  });
+
+  // Lookup forecast for lat and lng
+  const forecast = await fetcher.lookupForecastForLatLng(39.7456, -97.0892);
+
+  // mark it up and stick it in the DOM
+  const forecastNode = fetcher.markupForecast(forecast);
+  demo.appendChild(forecastNode);
+})();
+      </pre>
+
+      <p>Thanks for reading!</p>
+
+      <h3 class="gap-top">Note</h3>
+      <p>
+        This all started with wanting to renovate an old hairy and scary jQuery
+        script I'd wrote that parsed XML layouts from a different NWS API. It
+        worked at the time but I couldn't bring that cruft forward.
+      </p>
+      <p>
+        I had no ideas these endpoints existed at the time, and it just goes to
+        show there's always one more article to read. Thanks to everyone whose
+        work made this API public and so easy to use!
+      </p>
+    </main>
+
+    <script src="js/local-forecasts-weather-gov-api.js" async defer></script>
+  </body>
+</html>

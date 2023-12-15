@@ -1,3 +1,7 @@
+:root {
+  --accent-color: #f7be2c;
+}
+
 /* ------------------------------------------------------------------------ */
 /* Reset */
 /* ------------------------------------------------------------------------ */
@@ -61,20 +65,17 @@ ul li {
 /* ------------------------------------------------------------------------ */
 
 #header {
-  position: fixed;
-  top: 0;
-  left: 0;
   display: flex;
   align-items: center;
-  padding: 1em 1em 0.25em 1em;
+  padding: 1em 1em 0 1em;
   width: 100%;
   z-index: 999;
-  background: rgba(20, 20, 20, 0.9);
 }
 
 #header h1 {
   font-size: 30px;
   line-height: 30px;
+  color: var(--accent-color);
 }
 
 #icons {
@@ -111,6 +112,21 @@ ul li {
   transition: all 0.1s ease;
   margin-right: 10px;
   margin-bottom: 10px;
+
+  position: relative;
+}
+
+#projects ul li .title {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: rgba(20, 20, 20, 1);
+  padding: 6px;
+}
+
+#projects ul li:hover .title {
+  display: block;
 }
 
 #projects ul li a img {
@@ -125,7 +141,8 @@ ul li {
   transform: translateY(0);
 }
 
-#projects ul li a[href$="#no-article-yet"]:hover img {
+#projects ul li a[href$="#no-article-yet"]:hover img,
+#projects ul li a[href$="#deprecated"]:hover img {
   transform: translateY(0);
 }
 
@@ -135,13 +152,13 @@ ul li {
   height: 140px;
   object-fit: cover;
   object-position: center center;
-  margin-bottom: 10px;
   background: #333;
 }
 
 #projects ul li h2 {
   font-weight: normal;
   font-size: 12px;
+  margin-bottom: 2px;
 }
 
 #projects ul li h3 {

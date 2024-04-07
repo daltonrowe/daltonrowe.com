@@ -35,6 +35,11 @@ a {
   color: var(--accent-color);
 }
 
+.subtitle {
+  display: block;
+  margin-top: 1em;
+}
+
 @media screen and (min-width: 1000px) {
   #header {
     padding: 40px 0;

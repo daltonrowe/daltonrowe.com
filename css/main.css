@@ -123,6 +123,7 @@ ul li {
   left: 0;
   background: rgba(20, 20, 20, 1);
   padding: 6px;
+  min-width: 100%;
 }
 
 #projects ul li:hover .title {

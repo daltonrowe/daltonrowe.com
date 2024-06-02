@@ -195,6 +195,7 @@ li small {
   display: block;
   color: grey;
   margin-top: 0.6em;
+  line-height: 1.6em;
 }
 
 ol.contents {
@@ -222,4 +223,21 @@ ol.contents li a:hover {
 .back {
   font-size: 14px;
   margin-bottom: 50px;
+}
+
+#signoff {
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  place-items: center;
+}
+
+#signoff:after {
+  content: "DR";
+  background: var(--accent-color);
+  color: var(--accent-color);
+  font-size: 4px;
+  width: 20px;
+  height: 20px;
+  transform: rotate(45deg);
 }

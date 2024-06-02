@@ -111,6 +111,7 @@ ul li {
 
 #projects ul li {
   position: relative;
+  aspect-ratio: 1;
 }
 
 #projects ul li .title {

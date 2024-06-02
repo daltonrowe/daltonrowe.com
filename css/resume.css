@@ -20,6 +20,10 @@
   font-size: 14px;
 }
 
+.resume-card small {
+  margin-bottom: 6px;
+}
+
 .resume-card span:nth-of-type(1) {
   font-style: italic;
   margin-right: 16px;
@@ -30,6 +34,10 @@
   color: #888;
 }
 
+ul.short-list {
+  display: block;
+}
+
 ul.short-list li {
   display: inline-block;
   margin-bottom: 5px;
@@ -37,21 +45,21 @@ ul.short-list li {
 
 @media print {
   #header {
-    padding:0 0 40px 0;
+    padding: 0 0 40px 0;
   }
-  
+
   ul.resume-card li {
-    padding:0;
-    border:none;
+    padding: 0;
+    border: none;
   }
 
   ul.short-list li {
-    padding:0 18px 10px 0;
-    border:none;
+    padding: 0 18px 10px 0;
+    border: none;
   }
 
   .back {
-    display:none
+    display: none;
   }
 
   .page-break {

@@ -1,10 +1,19 @@
 :root {
   --accent-color: #f7be2c;
+  --accent-color-light: #ffffff;
+  --body-color: #bbb;
   --em-color: #aaa;
 }
 
 body {
   margin: 0 auto;
+  font-size: 18px;
+}
+
+@media screen and (min-width: 1000px) {
+  body {
+    font-size: 21px;
+  }
 }
 
 h1,
@@ -16,7 +25,7 @@ h6,
 span,
 p,
 a {
-  color: white;
+  color: #eee;
   margin: 0;
   padding: 0;
 }
@@ -74,34 +83,45 @@ a {
 }
 
 .gap-bottom {
-  margin-bottom: 60px;
+  margin-bottom: 20px;
 }
 
 h2,
-h3 {
+h3,
+h4 {
   max-width: 600px;
   margin: 0 auto 20px auto;
 }
 
+section {
+  position: relative;
+}
+
 h2 {
+  margin-top: 60px;
   border-bottom: 2px solid var(--accent-color);
 }
 
 h3 {
-  position: relative;
-  color: #ddd;
-  padding-left: 20px;
+  color: var(--accent-color);
 }
 
-h3::after {
-  position: absolute;
-  top: 4px;
-  left: 0;
-  content: " ";
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+h4 {
+  font-style: italic;
+  color: var(--accent-color-light);
+  display: block;
+}
+
+blockquote {
+  position: relative;
+  padding: 20px;
+  color: black;
   background: var(--accent-color);
+  font-weight: bold;
+  line-height: 1.3em;
+
+  max-width: 600px;
+  margin: 0 auto 20px auto;
 }
 
 pre {
@@ -115,9 +135,10 @@ pre {
 }
 
 p {
-  line-height: 1.7em;
+  line-height: 1.8em;
   max-width: 600px;
   margin: 0 auto 20px auto;
+  color: var(--body-color);
 }
 
 p a {
@@ -139,6 +160,15 @@ video {
   width: 800px;
   max-width: 100%;
   margin: 0 auto;
+  border-radius: 10px;
+}
+
+figcaption {
+  max-width: 600px;
+  margin: 0 auto 20px auto;
+  font-size: 0.6em;
+  color: #444;
+  text-align: center;
 }
 
 ul {
@@ -159,6 +189,34 @@ ul li {
   ul {
     font-size: 16px;
   }
+}
+
+li small {
+  display: block;
+  color: grey;
+  margin-top: 0.6em;
+}
+
+ol.contents {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  width: 600px;
+  max-width: 100%;
+  margin: 0 auto;
+  font-size: 14px;
+  list-style: none;
+  gap: 1em;
+}
+
+ol.contents li a {
+  padding: 16px;
+  border: 1px solid #444;
+}
+
+ol.contents li a:hover {
+  background: var(--accent-color);
+  color: black;
 }
 
 .back {

@@ -16,29 +16,402 @@
     </header>
 
     <main id="main">
+      <section>
+        <img
+          src="img/capturetag/ct-header.png"
+          alt="Players run to capture points while playing CaptureTag"
+          class="gap-bottom"
+        />
 
-      <p>
-        Yellowberri threw a video game tournament between Discord servers.
-        8 Overwatch teams threw down, with match commentary by up and coming casters, featuring stream overlays from yours truly.
-      </p>
+        <p>
+          I made a real world game using Raspberry Pi’s, NFC readers, LED
+          strips, and Supabase. The goal of the game is to capture and hold and
+          many capture points as you can, stealing them back from other players,
+          and sneaking off the gain control for your team.
+        </p>
 
-      <img src="img/dct1.png" alt="Discord Throwdown Twitch Livestream Screenshot" class="gap-bottom">
+        <blockquote>
+          It doesn't require any phones to play, and keeps players engaged in
+          the real world.
+        </blockquote>
+      </section>
 
-      <p class="gap-bottom">
-        This is also when a few YB members began community managing our YB Gaming Discord server, growing it into an awesome place and eventually meeting internet friends in real life!
-      </p>
+      <section>
+        <h2>Contents</h2>
 
-      <h2>Some neat things</h2>
+        <ol class="gap-bottom contents">
+          <li>
+            <a href="#the-game">The Game </a>
+          </li>
+          <li>
+            <a href="#the-tech">The Tech</a>
+          </li>
+          <li>
+            <a href="#playtest"> Playtest </a>
+          </li>
+          <li>
+            <a href="#next-steps">Next Steps </a>
+          </li>
+        </ol>
+      </section>
 
-      <ul class="gap-bottom">
-        <li>Stream overlay scorebard, custom colors, animations</li>
-        <li>Animated webm video transitions</li>
-        <li>Hosted backend Node server sending websockets to local OBS</li>
-        <li>Rebuilt a few versions of ^ since for other projects</li>
-        <li>Camera switching via office NDI</li>
-        <li>Discord hype meter to displaying avg # of chat mentions in stream overlays</li>
-        <li>Customizable cards, overlays, counters</li>
-      </ul>
+      <section id="the-game">
+        <h2>The Game</h2>
 
+        <p>
+          “Multi Hill King of the Hill” / “Control Points” is the best one
+          phrase explainers I’ve found so far. The goal is to capture areas for
+          your team by swiping your NFC card at the control point.
+        </p>
+
+        <img
+          src="img/capturetag/ct-capture.png"
+          alt="Player happy with swiping their point"
+          class="gap-bottom"
+        />
+        <figcaption>
+          A steathly player walks away from a recently captured point.
+        </figcaption>
+
+        <p>
+          A friend of mine runs a
+          <a href="https://kindaspoopy.com/">small music fest</a>, and uses LEDs
+          distributed around a campground to provide atmospheric lighting for
+          the event. I thought some cool interactive games could be created
+          using this setup.
+        </p>
+
+        <blockquote>
+          I wanted to make a game, that takes place in the real world involving
+          no phones or other devices.
+        </blockquote>
+
+        <p>
+          An optional scoreboard can then display captured areas as well as a
+          leaderboard.
+        </p>
+
+        <figure>
+          <img
+            src="img/capturetag/ct-scoreboard-screen.png"
+            alt="Scoreboard and floor plan displayed on a TV"
+            class="gap-bottom"
+          />
+          <figcaption>Scoreboard and floor plan displayed on a TV</figcaption>
+        </figure>
+      </section>
+
+      <section id="the-tech">
+        <h2>The Tech</h2>
+
+        <p>Each node / "hill" consists of:</p>
+
+        <ul>
+          <li>Raspberry Pi 3B+</li>
+          <li>WS2182 Light Strip</li>
+          <li>RC522 NFC Reader / Writer</li>
+        </ul>
+
+        <p>
+          I love working with Raspberry Pi as I enjoy working in strong,
+          well-trodden ecosystems. They are often overkill for projects, but its
+          great to continue working in a familiar Linux environment.
+        </p>
+
+        <figure>
+          <img
+            src="img/capturetag/ct-setup.jpg"
+            alt="Setting up CaptureTag NFC cards for the first play test"
+            class="gap-bottom"
+          />
+          <figcaption>
+            NFC cards and a Raspberry Pi node being setup for play.
+          </figcaption>
+        </figure>
+
+        <p>
+          I built this version in NodeJS, with the help of some awesome
+          packages, namely
+          <a href="https://github.com/beyondscreen/node-rpi-ws281x-native"
+            >node-rpi-ws281x-native</a
+          >
+          and
+          <a href="https://github.com/firsttris/mfrc522-rpi">mfrc522-rpi</a>.
+        </p>
+
+        <p>
+          Each card has a hex-encoded string written to it that decodes to
+          something like `B-taco`. The first letter being the team, and second
+          being the player's code name.
+        </p>
+
+        <p>
+          When a scan happens the Pi debounces the scan event (as they can
+          happen in quick succession) and then shoots up the data to a
+          <a href="supabase.com">Supabase</a> project with a few endpoints. A
+          lot of fun insights can be derived from the data, see the playtest
+          below for what I pulled out.
+        </p>
+
+        <figure>
+          <img
+            src="img/capturetag/ct-admin.jpg"
+            alt="Supabase admin dashboard"
+            class="gap-bottom"
+          />
+          <figcaption>
+            Rough and simple admin dashboard for managing games and nodes.
+          </figcaption>
+        </figure>
+
+        <p>
+          Game sessions, node assignment, and project endpoints can be managed
+          via a super rough dashboard I slapped together. I enjoyed working
+          framework free and keeping it as barebones as possible.
+        </p>
+
+        <p>
+          The scoreboard page uses Supabase Realtime to provide instant updates
+          to the capture state of each node, as well as keep the leaderboard up
+          to date.
+        </p>
+      </section>
+
+      <section id="playtest">
+        <h2>Playtest</h2>
+
+        <p>
+          I was planning to have a get-together with my friends in an Airbnb,
+          and I realized that would be perfect opportunity to try out the game!
+        </p>
+
+        <h3>Teaching</h3>
+
+        <p>
+          I didn’t get a representative experience of introducing the game to
+          players as all involved were close friends and more or less taught
+          each other. However I did learn a few things:
+        </p>
+
+        <ul>
+          <li>
+            Show Don't Tell:
+            <small>
+              All the words in the world didn’t compare to swiping a card and
+              seeing the color on the point change. The actual demo following by
+              a suggestion of how to be competitive got people interesting and
+              playing right away.
+            </small>
+          </li>
+
+          <li>
+            Personally Relevant Goals First:
+
+            <small>
+              Intially, I started introducing the team goals like holding the
+              point for your team and total capture time. But quickly I realized
+              players cared more about their personal actions and contributions,
+              so I started introducing that first.
+            </small>
+
+            <small>
+              I’m still personally interested in the team aspect so I’ll likely
+              spend time juicing the experience of contributing to one’s team
+              with team leaderboards and other stats.
+            </small>
+          </li>
+        </ul>
+
+        <h3>Player Feedback</h3>
+        <p>
+          I got tons of great feedback as I discussed with players, each had
+          their different play styles and focused on different parts of the
+          game.
+        </p>
+
+        <ul>
+          <li>
+            Desire for Leaderboard:
+            <small>
+              Universally, all players wanted to see who had the scans.
+              Initially the scoreboard only showed which team held each point.
+              Much like a competitive online game, team progress is great but
+              players want to see their own points.
+            </small>
+
+            <small>
+              Implementing the leaderboard was the only change I made over the
+              course of the weekend.
+            </small>
+          </li>
+
+          <li>
+            Lockout Time:
+            <small>
+              “Steals” happened pretty frequently. Players would capture a
+              point, and then another competitive player would sneak up right
+              behind them and recapture the point. Several players brought up
+              that a lockout time would feel better, so their progress wouldn’t
+              immediately be wiped away.
+            </small>
+
+            <small>
+              I like this idea, but will likely implement it with a light touch
+              as not to discourage the highly engaged stealing players.
+            </small>
+          </li>
+
+          <li>
+            Genuine Product Direction from Players:
+            <small>
+              Gathering feedback from players was very gratifying and
+              stimulating for me. Being on the ground with players having
+              discussions and combined with the agency to make any changes I
+              felt necessary was a beautiful taste of true user focused design.
+            </small>
+          </li>
+        </ul>
+
+        <h3>Parsing Data</h3>
+
+        <p>
+          A few days after the game was complete I parsed out all the scan
+          events to determine the winner, as well as some interesting stats!
+        </p>
+
+        <img
+          src="img/capturetag/ct-stats.png"
+          alt="Most captures by team"
+          class="gap-bottom"
+        />
+
+        <img
+          src="img/capturetag/ct-captures.png"
+          alt="Most captures by team"
+          class="gap-bottom"
+        />
+
+        <img
+          src="img/capturetag/ct-time.png"
+          alt="Total capture time"
+          class="gap-bottom"
+        />
+
+        <p>
+          Team based stats were less interesting in this playtest, but I think
+          with the right visiblity team based play could be made really fun for
+          players.
+        </p>
+      </section>
+
+      <section id="next-steps">
+        <h2>Next Steps</h2>
+
+        <p>
+          As I have time I want to polish the game, to make it as beautiful a
+          process as possible, moreso than expanding with new features. Here are
+          a few things that I've been ruminating on:
+        </p>
+
+        <h3>Improvements</h3>
+
+        <ul>
+          <li>
+            Local server support
+            <small
+              >There's not really a need to a central online server, I could
+              instead use a command node and keep the game local to the
+              network.</small
+            >
+          </li>
+          <li>
+            Use GUIDs + registration flow to remove the need to burn cards
+            <small>
+              Currently each card must be burnt with a team code and player
+              name, just use the built in GUIDs instead and register each card
+              to a user name.
+            </small>
+          </li>
+          <li>
+            Add lock out time with visual indication
+            <small
+              >As mentioned, prevent instant steals from watchful players.
+              There's opportunity for a high afforance design, gradually fading
+              into the new colors.</small
+            >
+          </li>
+          <li>
+            Control external API providing lights
+            <small
+              >To control a larger universe of lights, have a local command node
+              find and set lighting for node zones.</small
+            >
+          </li>
+          <li>
+            Shrink nodes from Pi to ESP32
+            <small
+              >Raspberry Pi is super duper overkill for these little scanner
+              nodes.</small
+            >
+          </li>
+          <li>
+            Prevent Partial Scans
+
+            <small>
+              Sometime I recieved partial scans from the NFC cards. I'm not sure
+              why this happens but there ways to check for and prevent this.
+            </small>
+          </li>
+        </ul>
+
+        <h3>Takeaways</h3>
+
+        <ul>
+          <li>
+            Rediscovering playground mentalities
+            <small
+              >The childlike playground mentality is essential when thinking
+              about and explaining games. It took a minute to get back into but
+              I loved living in that space during the playtest.</small
+            >
+            <small
+              >Intially the game was called "Lumi" but "CaptureTag" (as
+              suggested by my friend Tim) explains itself and communicate the
+              correct level of anti-serious playfulness.</small
+            >
+          </li>
+
+          <li>
+            Competing for Most Scans is Fun
+            <small
+              >Players talked the most about on upping each other, and loved
+              seeing their numbers go up!</small
+            >
+          </li>
+
+          <li>
+            Players Lose Cards
+            <small>Be able to ready to make backups :)</small>
+          </li>
+
+          <li>
+            Prevent Burn In
+            <small
+              >When displaying the leaderboard on a TV, have tools to prevent
+              burnin, such as a slight wiggle and dark mode.</small
+            >
+          </li>
+        </ul>
+      </section>
+
+      <section id="conclusion">
+        <h2>Thanks for Reading!</h2>
+        <p>
+          Creating an physical game with the tools of my incredibly virtual
+          trade was very gratifying. I'm excited to continue into the realm of
+          less productized tech.
+        </p>
+      </section>
+    </main>
   </body>
 </html>

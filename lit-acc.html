@@ -7,6 +7,44 @@
 
     <link rel="icon" type="image/png" href="favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <style>
+      .fade-between {
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        position: relative;
+        aspect-ratio: 1.57;
+
+        img {
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          height: calc(100% - 20px);
+          object-fit: cover;
+        }
+
+        img:nth-of-type(2) {
+          opacity: 0;
+          animation-duration: 3s;
+          animation-name: fade;
+          animation-iteration-count: infinite;
+        }
+      }
+
+      @keyframes fade {
+        from {
+          opacity: 0;
+        }
+        60% {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
   </head>
   <body>
     <header id="header">
@@ -24,8 +62,8 @@
 
         <figure>
           <img
-            src="img/lit-acc/loaded.jpg"
-            alt="Gatsby site with SVG loading"
+            src="img/lit-acc/loaded.webp"
+            alt="Gatsby site with literary designs"
           />
           <figcaption>
             The Shakespeare pattern was the one she wanted.
@@ -47,11 +85,17 @@
         </p>
 
         <figure>
-          <img
-            src="img/lit-acc/loading.jpg"
-            alt="Gatsby site loading with SVG placeholders."
-          />
-          <figcaption>Scoreboard and floor plan displayed on a TV</figcaption>
+          <div class="fade-between">
+            <img
+              src="img/lit-acc/loading.webp"
+              alt="Gatsby site loading with SVG placeholders."
+            />
+            <img
+              src="img/lit-acc/loaded.webp"
+              alt="Gatsby site with SVG loading"
+            />
+          </div>
+          <figcaption>Pre-rendered SVGs fading into loaded assets</figcaption>
         </figure>
 
         <p>

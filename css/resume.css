@@ -1,7 +1,3 @@
-#header {
-  background-color: transparent;
-}
-
 .resume-card span,
 .resume-card strong {
   display: block;
@@ -44,8 +40,16 @@ ul.short-list li {
 }
 
 @media print {
-  #header {
-    padding: 0 0 40px 0;
+  :root {
+    --accent-color: black;
+  }
+
+  .subtitle {
+    margin: 0;
+  }
+
+  h2 {
+    margin-top: 10px;
   }
 
   ul.resume-card li {

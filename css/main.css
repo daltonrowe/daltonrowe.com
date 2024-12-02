@@ -67,11 +67,11 @@ ul li {
 #header {
   display: flex;
   align-items: baseline;
-  padding: 1em 1em 0 1em;
   width: 100%;
   z-index: 999;
   display: flex;
   gap: 20px;
+  padding: 20px;
 }
 
 @media screen and (max-width: 490px) {

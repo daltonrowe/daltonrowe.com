@@ -44,22 +44,43 @@ ul.short-list li {
     --accent-color: black;
   }
 
+  #main {
+    padding-top: 0;
+  }
+
+  .topline {
+    font-size: 14px;
+  }
+
+  .web-only {
+    display: none;
+  }
+
   .subtitle {
     margin: 0;
   }
 
   h2 {
     margin-top: 10px;
+    font-size: 20px;
+    color: var(--accent-color);
+  }
+
+  strong {
+    color: var(--accent-color);
   }
 
   ul.resume-card li {
     padding: 0;
     border: none;
+    margin-bottom: 6px;
   }
 
   ul.short-list li {
-    padding: 0 18px 10px 0;
+    padding: 0 10px 6px 0;
     border: none;
+    font-size: 12px;
+    color: var(--accent-color);
   }
 
   .back {

@@ -17,7 +17,7 @@
 }
 
 .resume-card small {
-  margin-bottom: 6px;
+  margin: 3px 0;
 }
 
 .resume-card span:nth-of-type(1) {
@@ -49,10 +49,10 @@ ul.short-list li {
   }
 
   .topline {
-    font-size: 14px;
+    font-size: 12px;
   }
 
-  .web-only {
+  #main .web-only {
     display: none;
   }
 

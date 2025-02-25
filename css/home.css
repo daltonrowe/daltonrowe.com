@@ -1,89 +1,16 @@
-:root {
-  --accent-color: #f7be2c;
-}
-
-/* ------------------------------------------------------------------------ */
-/* Reset */
-/* ------------------------------------------------------------------------ */
-
-* {
-  box-sizing: border-box;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-span,
-p,
-a {
-  color: white;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #161616;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 16px;
-}
-
-a {
-  display: block;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: none;
-}
-
-img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-ul,
-ol {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-ul li {
-  display: block;
-  padding: 0;
-}
-
-/* ------------------------------------------------------------------------ */
-/* Site Layout */
-/* ------------------------------------------------------------------------ */
-
-#header {
+#home-header {
   display: flex;
   align-items: baseline;
   width: 100%;
   z-index: 999;
   display: flex;
   gap: 20px;
-  padding: 20px;
 }
 
 @media screen and (max-width: 490px) {
-  #header {
+  #home-header {
     flex-direction: column;
   }
-}
-
-#header h1 {
-  font-size: 30px;
-  line-height: 30px;
-  color: var(--accent-color);
 }
 
 #links {
@@ -91,8 +18,9 @@ ul li {
   gap: 20px;
 }
 
-#main {
-  padding: 1em;
+main {
+  max-width: none;
+  align-self: flex-start;
 }
 
 #projects ul {
@@ -164,13 +92,4 @@ ul li {
   font-weight: normal;
   font-size: 10px;
   opacity: 0.65;
-}
-
-footer {
-  padding: 1em;
-}
-
-footer .no-tracking {
-  font-size: 8px;
-  opacity: 0.6;
 }

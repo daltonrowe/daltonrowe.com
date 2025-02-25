@@ -1,25 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-function template(template, contents, defaults) {
-  let markup = template;
-
-  if (contents.indexOf("%%%") !== -1) {
-    const [metaStr, content] = contents.split("%%%");
-    const meta = { ...defaults, ...JSON.parse(metaStr) };
-
-    for (const key in meta) {
-      markup = markup.replaceAll(`{{${key}}}`, meta[key]);
-    }
-
-    markup = markup.replace("{{content}}", content);
-  } else {
-    markup = markup.replace("{{content}}", contents);
-  }
-
-  return markup;
-}
-
 // clear out existing folders
 
 const distPath = path.join(import.meta.dirname, "dist");
@@ -28,33 +9,102 @@ const distExists = fs.existsSync(distPath);
 if (distExists) fs.rmSync(distPath, { recursive: true });
 fs.mkdirSync(distPath);
 
-// generate articles
+// templating
 
-const articlesPath = path.join(import.meta.dirname, "articles");
-const articles = fs.readdirSync(articlesPath);
+function template(template, meta) {
+  let markup = template;
 
-const articlesTemplatePath = path.join(
-  import.meta.dirname,
-  "templates",
-  "article.html",
-);
-const articleTemplate = fs.readFileSync(articlesTemplatePath, {
-  encoding: "utf-8",
-});
+  for (const key in meta) {
+    markup = markup.replaceAll(`{{${key}}}`, meta[key]);
+  }
 
-for (const article of articles) {
-  const articlePath = path.join(articlesPath, article);
-  const articleContent = fs.readFileSync(articlePath, { encoding: "utf-8" });
+  return markup;
+}
 
-  const markup = template(articleTemplate, articleContent, {
-    title: "",
-    headline: "",
-    subtitle: "",
+function generate(dirName, templateName, meta) {
+  const contentDir = path.join(import.meta.dirname, dirName);
+  const contentFiles = fs.readdirSync(contentDir);
+
+  const templatePath = path.join(
+    import.meta.dirname,
+    "templates",
+    templateName,
+  );
+
+  const templateContent = fs.readFileSync(templatePath, {
+    encoding: "utf-8",
   });
 
-  const outPath = path.join(distPath, article);
-  fs.writeFileSync(outPath, markup, { encoding: "utf-8" });
+  for (const file of contentFiles) {
+    const contentPath = path.join(contentDir, file);
+    const content = fs.readFileSync(contentPath, { encoding: "utf-8" });
+
+    const generated = template(
+      templateContent,
+      typeof meta === "function" ? meta(file, content) : meta,
+    );
+
+    const distFilePath = path.join(distPath, `${file.split(".")[0]}.html`);
+    fs.writeFileSync(distFilePath, generated, { encoding: "utf-8" });
+  }
 }
+
+// generate articles
+
+generate("articles", "article.html", (file, content) => {
+  const [meta, html] = content.split("%%%");
+
+  const json = JSON.parse(meta)
+
+  return {
+    title: json.title ?? "",
+    headline: json.headline ?? "",
+    subtitle: json.subtitle ?? "",
+    html
+  }
+});
+
+// generate thoughts
+
+generate("thoughts", "thought.html", (file, content) => {
+  const date = new Date(file.split(".")[0]);
+
+  const title = date.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  })
+
+  const meta = {
+    title,
+    headline: title,
+    subtitle: title,
+    html: content
+  }
+
+  return meta;
+});
+
+// generate links
+
+generate("links", "link.html", (file, content) => {
+  const date = new Date(file.split(".")[0]);
+
+  const title = date.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  })
+
+  const meta = {
+    title,
+    headline: title,
+    subtitle: title,
+    ...JSON.parse(content)
+  }
+
+  return meta;
+});
 
 // copy static assets
 

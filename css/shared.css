@@ -1,0 +1,112 @@
+:root {
+  --accent-color: #f7be2c;
+  --accent-color-light: #ffffff;
+  --body-color: #bbb;
+  --em-color: #aaa;
+}
+
+/* ------------------------------------------------------------------------ */
+/* Reset */
+/* ------------------------------------------------------------------------ */
+
+* {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+p,
+a {
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 1em;
+  background-color: #161616;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+a {
+  display: block;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+ul,
+ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul li {
+  display: block;
+  padding: 0;
+}
+
+h1 {
+  color: var(--accent-color);
+}
+
+#header h1 {
+  font-size: 30px;
+  line-height: 30px;
+}
+
+#header {
+  position: static;
+  display: block;
+  width: 100%;
+  max-width: 600px;
+}
+
+#header h1 {
+  line-height: 38px;
+  color: var(--accent-color);
+}
+
+.subtitle {
+  display: block;
+  margin-top: 1em;
+}
+
+@media screen and (min-width: 1000px) {
+  #header h1 {
+    font-size: 64px;
+    line-height: 1em;
+  }
+}
+
+main {
+  width: 100%;
+  max-width: 600px;
+}
+
+.back {
+  font-size: 14px;
+  margin-bottom: 50px;
+}

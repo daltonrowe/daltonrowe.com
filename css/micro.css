@@ -1,0 +1,9 @@
+#header h1 {
+  font-size: 32px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

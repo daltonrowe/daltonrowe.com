@@ -21,7 +21,7 @@ function template(template, meta) {
   return markup;
 }
 
-function generate(dirName, templateName, meta) {
+function generate(dirName, templateName, meta, subDir = '') {
   const contentDir = path.join(import.meta.dirname, dirName);
   const contentFiles = fs.readdirSync(contentDir);
 
@@ -35,6 +35,9 @@ function generate(dirName, templateName, meta) {
     encoding: "utf-8",
   });
 
+  const distDirPath = path.join(distPath, subDir)
+  if (subDir) fs.mkdirSync(distDirPath)
+
   for (const file of contentFiles) {
     const contentPath = path.join(contentDir, file);
     const content = fs.readFileSync(contentPath, { encoding: "utf-8" });
@@ -44,8 +47,8 @@ function generate(dirName, templateName, meta) {
       typeof meta === "function" ? meta(file, content) : meta,
     );
 
-    const distFilePath = path.join(distPath, `${file.split(".")[0]}.html`);
-    fs.writeFileSync(distFilePath, generated, { encoding: "utf-8" });
+    const distFilePath = path.join(distDirPath, `${file.split(".")[0]}.html`);
+    fs.writeFileSync(distFilePath, generated, { encoding: "utf-8", recursive: true });
   }
 }
 
@@ -54,14 +57,14 @@ function generate(dirName, templateName, meta) {
 generate("articles", "article.html", (file, content) => {
   const [meta, html] = content.split("%%%");
 
-  const json = JSON.parse(meta)
+  const json = JSON.parse(meta);
 
   return {
     title: json.title ?? "",
     headline: json.headline ?? "",
     subtitle: json.subtitle ?? "",
-    html
-  }
+    html,
+  };
 });
 
 // generate thoughts
@@ -73,38 +76,42 @@ generate("thoughts", "thought.html", (file, content) => {
     month: "long",
     day: "numeric",
     year: "numeric",
-  })
+  });
 
   const meta = {
     title,
-    headline: title,
-    subtitle: title,
-    html: content
-  }
+    html: content,
+  };
 
   return meta;
-});
+}, 'thoughts');
 
 // generate links
 
 generate("links", "link.html", (file, content) => {
-  const date = new Date(file.split(".")[0]);
+  const filename = file.split(".")[0];
+  const dateStr = filename.includes("_") ? filename.split("_")[0] : filename;
+  const date = new Date(dateStr);
 
   const title = date.toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
     year: "numeric",
-  })
+  });
+
+  const json = JSON.parse(content);
+
+  let html = "";
+  if (json.description) html += `<p>${json.description}</p>`;
+  if (json.quote) html += `<blockquote>${json.quote}</blockquote>`;
 
   const meta = {
     title,
-    headline: title,
-    subtitle: title,
-    ...JSON.parse(content)
-  }
+    html,
+  };
 
   return meta;
-});
+}, 'links');
 
 // copy static assets
 

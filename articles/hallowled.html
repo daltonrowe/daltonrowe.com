@@ -1,0 +1,139 @@
+{
+"title": "HalloWLED: Spooky Sound Effects Controller",
+"headline": "HalloWLED",
+"subtitle": "Fall 2024"
+}
+
+%%%
+
+<section>
+  <img src="img/hallowled/hallowled1.webp" alt="Hordes of Kinder descending on our pavilion" />
+
+  <p>
+    At the beginning of our first year in Germany, we were informed
+    Halloween was a big deal on the siedlung.
+  </p>
+
+  <p>
+    Being fools for Halloween ourselves we bust out the decorations, and I
+    whipped up a little script to play sound effects with synchronized
+    lighting.
+  </p>
+
+  <blockquote>A couple people even took pictures!</blockquote>
+
+  <p>Some of my favorite scenes:</p>
+
+  <ul>
+    <li>
+      <span class="icon">⚡️</span>
+      Lightning Flashes with Rolling Thunder
+    </li>
+    <li>
+      <span class="icon">🍯</span>
+      Boiling Cauldron with Laughing Witch
+    </li>
+    <li>
+      <span class="icon">🎪</span>
+      Creepy Circus
+    </li>
+    <li>
+      <span class="icon">🚨</span>
+      Eerie Red Glow with Synths
+    </li>
+    <li>
+      <span class="icon">🎃</span>
+      And More!
+    </li>
+  </ul>
+</section>
+
+<section id="wled">
+  <h2>WLED</h2>
+
+  <p>
+    <a href="https://github.com/aircoookie/WLED/" target="_blank">WLED</a>
+    is an LED controller for ESP32/ESP8266. It has tons of built in
+    effects and a good amount of customization. It provides a web UI for
+    editing but also includes a JSON API!
+  </p>
+
+  <figure>
+    <img src="img/hallowled/hallowled3.webp" alt="Prebuilt WLED ESP32 controller" />
+    <figcaption>Prebuilt WLED ESP32 controller</figcaption>
+  </figure>
+
+  <p>
+    These prebuilt ESP32 boards with WLED already flashed made setup a
+    breeze. Only needed to update OTA, setup the attached light strips,
+    connect to the network!
+  </p>
+
+  <figure>
+    <img src="img/hallowled/hallowled2.webp" alt="HalloWLED running on my machine" />
+    <figcaption>HalloWLED can run from a laptop or a Pi.</figcaption>
+  </figure>
+</section>
+
+<section id="some-details">
+  <h2>Networking</h2>
+
+  <p>
+    HalloWLED is a great starting point if you want to script some WLED
+    instances via their API.
+  </p>
+
+  <p>
+    It can run on a network, where a hostname for a node is required. It
+    will then grab all other node IPs via the WLED API.
+  </p>
+
+  <p>
+    I found updating each node directly to be more reliable then using
+    WLED's built in sync, where occasionally a strip would not recieve the
+    new effect.
+  </p>
+
+  <figure>
+    <img src="img/hallowled/hallowled5.webp" alt="HalloWLED running in the car for Trunk or Treat" />
+    <figcaption>
+      HalloWLED running in direct AP mode for Trunk or Treat
+    </figcaption>
+  </figure>
+
+  <p>
+    Additionally it can also run in direct AP mode, where it connects the
+    WLED instance's wireless access point. For Trunk or Treat decorations,
+    I ran a WLED + 120 LED strip off a pocket battery pack, and could have
+    stayed lit for probably ~6 hours.
+  </p>
+</section>
+
+<section id="some-details">
+  <h2>Happy Halloween!</h2>
+
+  <p>
+    Its a basic project, but I did take some care and iterations to make
+    it a good experience for viewers.
+  </p>
+
+  <p>
+    It doesn't repeat effects back to back to ensure variety, and it swaps
+    to a background scene in between effects in order to prevent effect
+    lighting for outlasting its welcome.
+  </p>
+
+  <figure>
+    <img src="img/hallowled/hallowled4.webp" alt="Alien halloween costume" />
+    <figcaption>My wife being out of this world 👽</figcaption>
+  </figure>
+
+  <p>
+    I'm glad my little weekend project went off without a hitch, and made
+    some young folks Halloween even more fun!
+  </p>
+
+  <p>
+    <a href="https://github.com/daltonrowe/hallowled">View the "HalloWLED" repo on Github here</a>
+  </p>
+</section>

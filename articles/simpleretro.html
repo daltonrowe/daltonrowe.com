@@ -1,0 +1,55 @@
+{
+"title": "simpleretro",
+"headline": "simpleretro.xyz",
+"subtitle": "Winter 2022"
+}
+
+%%%
+
+<section>
+  <p>
+    Another in a series of side projects scratching my own itches. Every
+    sprint our Product Manager would complain about not being able to find
+    a simple retro tool that allows for ranking by number of votes.
+  </p>
+
+  <figure>
+    <img src="img/simpleretro/admin.webp" alt="simpleretro retrospective" />
+    <figcaption>
+      Retro runner's view with all session controls.
+    </figcaption>
+  </figure>
+
+  <p>
+    I was enjoying working with Firebase at the time, so I whipped up a
+    quick tool with only the features we needed:
+  </p>
+
+  <ul>
+    <li><span class="icon">😎</span> Masking user's feedback</li>
+    <li><span class="icon">📡</span> Realtime editing</li>
+    <li><span class="icon">🗳️</span> Vote limiting</li>
+    <li><span class="icon">📚</span> Sort by votes / recency</li>
+    <li><span class="icon">🖇️</span> Combining similar feedback</li>
+  </ul>
+
+  <p>
+    We got some nice use out of this guy. I designed some of the systems
+    around the good faith of participants, some of the logic around card
+    masking and maximum votes lives in the frontend. None of the
+    developers involved got overly curious at what they might be able to
+    affect but it's only a matter of time.
+  </p>
+
+  <figure>
+    <img src="img/simpleretro/user.webp" alt="A retro participant's view" />
+    <figcaption>A retro participant's view</figcaption>
+  </figure>
+
+  <p>
+    Firebase is great for throwing together apps really quickly. This
+    project explored use of Firebase's Firestore emulation for a test
+    suite which is quite ergonomic, as well as some handrolled
+    "migrations" which were less so 🙂.
+  </p>
+</section>

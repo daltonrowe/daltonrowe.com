@@ -21,7 +21,7 @@ function template(template, meta) {
   return markup;
 }
 
-function generate(dirName, templateName, meta, subDir = '') {
+function generate(dirName, templateName, meta, subDir = "") {
   const contentDir = path.join(import.meta.dirname, dirName);
   const contentFiles = fs.readdirSync(contentDir);
 
@@ -35,8 +35,8 @@ function generate(dirName, templateName, meta, subDir = '') {
     encoding: "utf-8",
   });
 
-  const distDirPath = path.join(distPath, subDir)
-  if (subDir) fs.mkdirSync(distDirPath)
+  const distDirPath = path.join(distPath, subDir);
+  if (subDir) fs.mkdirSync(distDirPath);
 
   for (const file of contentFiles) {
     const contentPath = path.join(contentDir, file);
@@ -48,7 +48,10 @@ function generate(dirName, templateName, meta, subDir = '') {
     );
 
     const distFilePath = path.join(distDirPath, `${file.split(".")[0]}.html`);
-    fs.writeFileSync(distFilePath, generated, { encoding: "utf-8", recursive: true });
+    fs.writeFileSync(distFilePath, generated, {
+      encoding: "utf-8",
+      recursive: true,
+    });
   }
 }
 
@@ -69,49 +72,59 @@ generate("articles", "article.html", (file, content) => {
 
 // generate thoughts
 
-generate("thoughts", "thought.html", (file, content) => {
-  const date = new Date(file.split(".")[0]);
+generate(
+  "thoughts",
+  "thought.html",
+  (file, content) => {
+    const date = new Date(file.split(".")[0]);
 
-  const title = date.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
+    const title = date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
 
-  const meta = {
-    title,
-    html: content,
-  };
+    const meta = {
+      title,
+      html: content,
+    };
 
-  return meta;
-}, 'thoughts');
+    return meta;
+  },
+  "thoughts",
+);
 
 // generate links
 
-generate("links", "link.html", (file, content) => {
-  const filename = file.split(".")[0];
-  const dateStr = filename.includes("_") ? filename.split("_")[0] : filename;
-  const date = new Date(dateStr);
+generate(
+  "links",
+  "link.html",
+  (file, content) => {
+    const filename = file.split(".")[0];
+    const dateStr = filename.includes("_") ? filename.split("_")[0] : filename;
+    const date = new Date(dateStr);
 
-  const title = date.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
+    const title = date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
 
-  const json = JSON.parse(content);
+    const json = JSON.parse(content);
 
-  let html = "";
-  if (json.description) html += `<p>${json.description}</p>`;
-  if (json.quote) html += `<blockquote>${json.quote}</blockquote>`;
+    let html = "";
+    if (json.description) html += `<p>${json.description}</p>`;
+    if (json.quote) html += `<blockquote>${json.quote}</blockquote>`;
 
-  const meta = {
-    title,
-    html,
-  };
+    const meta = {
+      title,
+      html,
+    };
 
-  return meta;
-}, 'links');
+    return meta;
+  },
+  "links",
+);
 
 // copy static assets
 

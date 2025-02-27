@@ -117,6 +117,7 @@ generate(
     if (json.quote) html += `<blockquote>${json.quote}</blockquote>`;
 
     const meta = {
+      ...json,
       title,
       html,
     };

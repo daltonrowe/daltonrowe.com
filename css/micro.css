@@ -7,3 +7,24 @@ main {
   flex-direction: column;
   gap: 20px;
 }
+
+main a {
+  padding: 1em 0;
+  font-size: 24px;
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+p,
+blockquote {
+  font-size: 21px;
+  line-height: 1.5em;
+  color: white;
+}
+
+blockquote {
+  border: 1px dashed var(--accent-color);
+  padding: 1em;
+  margin: 0;
+  border-radius: 10px;
+}

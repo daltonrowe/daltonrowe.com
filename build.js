@@ -113,8 +113,8 @@ generate(
     const json = JSON.parse(content);
 
     let html = "";
-    if (json.description) html += `<p>${json.description}</p>`;
-    if (json.quote) html += `<blockquote>${json.quote}</blockquote>`;
+    if (json.description) html += `<p>${json.description.replaceAll('\n', '<br>')}</p>`;
+    if (json.quote) html += `<blockquote>${json.quote.replaceAll('\n', '<br>')}</blockquote>`;
 
     const meta = {
       ...json,

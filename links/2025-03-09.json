@@ -1,0 +1,5 @@
+{
+  "url": "https://www.bleepingcomputer.com/news/security/undocumented-backdoor-found-in-bluetooth-chip-used-by-a-billion-devices/",
+  "description": "Well that sucks. Consumer level security might all be just theater.",
+  "quote": "In total, they found 29 undocumented commands, collectively characterized as a \"backdoor,\" that could be used for memory manipulation (read/write RAM and Flash), MAC address spoofing (device impersonation), and LMP/LLCP packet injection."
+}

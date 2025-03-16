@@ -72,18 +72,18 @@ function generate(dirName, templateName, buildMeta, subDir = "") {
 
     const meta = buildMeta(file, content)
 
-    if (!meta.html) return;
+    if (meta.html) {
+      const generated = fillTemplate(
+        template,
+        meta,
+      );
 
-    const generated = fillTemplate(
-      template,
-      meta,
-    );
-
-    const distFilePath = path.join(distDirPath, `${file.split(".")[0]}.html`);
-    fs.writeFileSync(distFilePath, generated, {
-      encoding: "utf-8",
-      recursive: true,
-    });
+      const distFilePath = path.join(distDirPath, `${file.split(".")[0]}.html`);
+      fs.writeFileSync(distFilePath, generated, {
+        encoding: "utf-8",
+        recursive: true,
+      });
+    }
   }
 }
 

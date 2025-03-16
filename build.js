@@ -38,16 +38,16 @@ function loadTemplate(templateName) {
     templateName,
   );
 
-  const templateContent = fs.readFileSync(templatePath, {
+  const template = fs.readFileSync(templatePath, {
     encoding: "utf-8",
   });
 
-  return templateContent
+  return template
 }
 
 // templating
 
-function template(template, meta) {
+function fillTemplate(template, meta) {
   let markup = template;
 
   for (const key in meta) {
@@ -57,11 +57,11 @@ function template(template, meta) {
   return markup;
 }
 
-function generate(dirName, templateName, meta, subDir = "") {
+function generate(dirName, templateName, buildMeta, subDir = "") {
   const contentDir = path.join(import.meta.dirname, dirName);
   const contentFiles = fs.readdirSync(contentDir);
 
-  const templateContent = loadTemplate(templateName);
+  const template = loadTemplate(templateName);
 
   const distDirPath = path.join(distPath, subDir);
   if (subDir) fs.mkdirSync(distDirPath);
@@ -70,9 +70,13 @@ function generate(dirName, templateName, meta, subDir = "") {
     const contentPath = path.join(contentDir, file);
     const content = fs.readFileSync(contentPath, { encoding: "utf-8" });
 
-    const generated = template(
-      templateContent,
-      typeof meta === "function" ? meta(file, content) : meta,
+    const meta = buildMeta(file, content)
+
+    if (!meta.html) return;
+
+    const generated = fillTemplate(
+      template,
+      meta,
     );
 
     const distFilePath = path.join(distDirPath, `${file.split(".")[0]}.html`);
@@ -82,39 +86,6 @@ function generate(dirName, templateName, meta, subDir = "") {
     });
   }
 }
-
-// generate articles
-
-generate("articles", "article.html", (file, content) => {
-  const [meta, html] = content.split("%%%");
-
-  const json = JSON.parse(meta);
-
-  return {
-    title: json.title ?? "",
-    headline: json.headline ?? "",
-    subtitle: json.subtitle ?? "",
-    html,
-  };
-});
-
-// generate thoughts
-
-generate(
-  "thoughts",
-  "thought.html",
-  (file, content) => {
-    const date = new Date(file.split(".")[0]);
-
-    const meta = {
-      title: humanDate(date),
-      html: content,
-    };
-
-    return meta;
-  },
-  "thoughts",
-);
 
 // generate links
 
@@ -150,7 +121,8 @@ generate(
 // generate links root
 
 (() => {
-  const templateContent = loadTemplate('home.html')
+  const template = loadTemplate('home.html')
+  const itemContent = loadTemplate('link-item.html')
 
   let html = '';
 
@@ -159,16 +131,7 @@ generate(
     section += `<section data-year="${year}"><h2>${year}</h2>`
 
     for (const link of linksContent[year]) {
-      section += template(`
-<div class="link">
-  <a href="{{url}}" target="_blank">{{url}}</a>
-
-  {{html}}
-
-  <div class="row">
-    {{title}} <a href="/links/{{filename}}">Permalink</a>
-  </div>
-</div>`, link)
+      section += fillTemplate(itemContent, link)
     }
 
     section += `</section>`
@@ -177,7 +140,7 @@ generate(
 
   html = `<article id="links">${html}</article>`
 
-  const generated = template(templateContent, {
+  const generated = fillTemplate(template, {
     title: 'Dalton Rowe - Links',
     html
   })
@@ -188,17 +151,48 @@ generate(
   });
 })();
 
+const articlesContent = []
+
+// generate articles
+
+generate("articles", "article.html", (file, content) => {
+  const [filemeta, html] = content.split("%%%");
+
+  const json = JSON.parse(filemeta);
+
+  const meta = {
+    title: json.title ?? "",
+    headline: json.headline ?? "",
+    subtitle: json.subtitle ?? "",
+    url: json.url ?? file,
+    attrs: json.url?.includes('http://') ? 'target="_blank"' : '',
+    thumb: file.split('.')[0],
+    shorttitle: json.shorttitle ?? json.subtitle,
+    html,
+  }
+
+  articlesContent.push(meta)
+
+  return meta;
+});
+
 // generate home
 
 (() => {
-  const templateContent = loadTemplate('home.html')
+  const template = loadTemplate('home.html')
+  const itemContent = loadTemplate('article-item.html')
 
-  const contentPath = path.join('index.html');
-  const content = fs.readFileSync(contentPath, { encoding: "utf-8" });
+  let html = ''
 
-  const generated = template(templateContent, {
+  for (const article of articlesContent) {
+    html += fillTemplate(itemContent, article)
+  }
+
+  html = `<section id="projects"><ul>${html}</ul></section>`
+
+  const generated = fillTemplate(template, {
     title: 'Dalton Rowe',
-    html: content
+    html,
   })
 
   const distFilePath = path.join(distPath, 'index.html');

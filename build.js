@@ -165,9 +165,10 @@ generate("articles", "article.html", (file, content) => {
     headline: json.headline ?? "",
     subtitle: json.subtitle ?? "",
     url: json.url ?? file,
-    attrs: json.url?.includes('http://') ? 'target="_blank"' : '',
+    attrs: json.url?.includes('://') ? 'target="_blank"' : '',
     thumb: file.split('.')[0],
     shorttitle: json.shorttitle ?? json.subtitle,
+    datetime: new Date(json.date).getTime(),
     html,
   }
 
@@ -183,6 +184,8 @@ generate("articles", "article.html", (file, content) => {
   const itemContent = loadTemplate('article-item.html')
 
   let html = ''
+
+  articlesContent.sort((a, b) => a.datetime < b.datetime ? 1 : -1)
 
   for (const article of articlesContent) {
     html += fillTemplate(itemContent, article)

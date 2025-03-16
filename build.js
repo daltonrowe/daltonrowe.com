@@ -127,9 +127,37 @@ generate(
   "links",
 );
 
+// generate home
+
+(() => {
+  const templatePath = path.join(
+    import.meta.dirname,
+    "templates",
+    'home.html',
+  );
+
+  const templateContent = fs.readFileSync(templatePath, {
+    encoding: "utf-8",
+  });
+
+  const contentPath = path.join('index.html');
+  const content = fs.readFileSync(contentPath, { encoding: "utf-8" });
+
+  const generated = template(templateContent, {
+    title: 'Dalton Rowe',
+    html: content
+  })
+
+  const distFilePath = path.join(distPath, 'index.html');
+
+  fs.writeFileSync(distFilePath, generated, {
+    encoding: "utf-8",
+  });
+})()
+
 // copy static assets
 
-for (const rootFile of ["favicon.svg", "index.html", "resume.html"]) {
+for (const rootFile of ["favicon.svg", "resume.html"]) {
   fs.cpSync(
     path.join(import.meta.dirname, rootFile),
     path.join(import.meta.dirname, "dist", rootFile),

@@ -9,6 +9,44 @@ const distExists = fs.existsSync(distPath);
 if (distExists) fs.rmSync(distPath, { recursive: true });
 fs.mkdirSync(distPath);
 
+// dates as displayed to user
+
+function humanDate(d) {
+  let date = typeof d === 'string' ? new Date(d) : d
+
+  return date.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+// process link json
+
+function markupLink(json) {
+  let html = "";
+  if (json.description) html += `<p>${json.description.replaceAll('\n', '<br>')}</p>`;
+  if (json.quote) html += `<blockquote>${json.quote.replaceAll('\n', '<br>')}</blockquote>`;
+
+  return html;
+}
+
+// get template
+
+function loadTemplate(templateName) {
+  const templatePath = path.join(
+    import.meta.dirname,
+    "templates",
+    templateName,
+  );
+
+  const templateContent = fs.readFileSync(templatePath, {
+    encoding: "utf-8",
+  });
+
+  return templateContent
+}
+
 // templating
 
 function template(template, meta) {
@@ -25,15 +63,7 @@ function generate(dirName, templateName, meta, subDir = "") {
   const contentDir = path.join(import.meta.dirname, dirName);
   const contentFiles = fs.readdirSync(contentDir);
 
-  const templatePath = path.join(
-    import.meta.dirname,
-    "templates",
-    templateName,
-  );
-
-  const templateContent = fs.readFileSync(templatePath, {
-    encoding: "utf-8",
-  });
+  const templateContent = loadTemplate(templateName);
 
   const distDirPath = path.join(distPath, subDir);
   if (subDir) fs.mkdirSync(distDirPath);
@@ -77,12 +107,7 @@ generate(
   "thought.html",
   (file, content) => {
     const date = new Date(file.split(".")[0]);
-
-    const title = date.toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
+    const title = humanDate(date)
 
     const meta = {
       title,
@@ -102,19 +127,9 @@ generate(
   (file, content) => {
     const filename = file.split(".")[0];
     const dateStr = filename.includes("_") ? filename.split("_")[0] : filename;
-    const date = new Date(dateStr);
-
-    const title = date.toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-
+    const title = humanDate(dateStr)
     const json = JSON.parse(content);
-
-    let html = "";
-    if (json.description) html += `<p>${json.description.replaceAll('\n', '<br>')}</p>`;
-    if (json.quote) html += `<blockquote>${json.quote.replaceAll('\n', '<br>')}</blockquote>`;
+    const html = markupLink(json)
 
     const meta = {
       ...json,
@@ -130,15 +145,7 @@ generate(
 // generate home
 
 (() => {
-  const templatePath = path.join(
-    import.meta.dirname,
-    "templates",
-    'home.html',
-  );
-
-  const templateContent = fs.readFileSync(templatePath, {
-    encoding: "utf-8",
-  });
+  const templateContent = loadTemplate('home.html')
 
   const contentPath = path.join('index.html');
   const content = fs.readFileSync(contentPath, { encoding: "utf-8" });
@@ -149,6 +156,26 @@ generate(
   })
 
   const distFilePath = path.join(distPath, 'index.html');
+
+  fs.writeFileSync(distFilePath, generated, {
+    encoding: "utf-8",
+  });
+})();
+
+// generate links root
+
+(() => {
+  const templateContent = loadTemplate('home.html')
+
+  const contentPath = path.join('links.html');
+  const content = fs.readFileSync(contentPath, { encoding: "utf-8" });
+
+  const generated = template(templateContent, {
+    title: 'Dalton Rowe',
+    html: content
+  })
+
+  const distFilePath = path.join(distPath, 'links.html');
 
   fs.writeFileSync(distFilePath, generated, {
     encoding: "utf-8",

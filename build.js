@@ -11,9 +11,7 @@ fs.mkdirSync(distPath);
 
 // dates as displayed to user
 
-function humanDate(d) {
-  let date = typeof d === 'string' ? new Date(d) : d
-
+function humanDate(date) {
   return date.toLocaleDateString("en-US", {
     month: "long",
     day: "numeric",
@@ -25,8 +23,8 @@ function humanDate(d) {
 
 function markupLink(json) {
   let html = "";
+  if (json.quote) html += `<blockquote>&quot;${json.quote.replaceAll('\n', '<br>')}&quot;</blockquote>`;
   if (json.description) html += `<p>${json.description.replaceAll('\n', '<br>')}</p>`;
-  if (json.quote) html += `<blockquote>${json.quote.replaceAll('\n', '<br>')}</blockquote>`;
 
   return html;
 }
@@ -107,10 +105,9 @@ generate(
   "thought.html",
   (file, content) => {
     const date = new Date(file.split(".")[0]);
-    const title = humanDate(date)
 
     const meta = {
-      title,
+      title: humanDate(date),
       html: content,
     };
 
@@ -121,13 +118,17 @@ generate(
 
 // generate links
 
+const linksContent = {}
+
 generate(
   "links",
   "link.html",
   (file, content) => {
     const filename = file.split(".")[0];
     const dateStr = filename.includes("_") ? filename.split("_")[0] : filename;
-    const title = humanDate(dateStr)
+    const date = new Date(dateStr)
+
+    const title = humanDate(date)
     const json = JSON.parse(content);
     const html = markupLink(json)
 
@@ -135,12 +136,57 @@ generate(
       ...json,
       title,
       html,
+      filename
     };
+
+    if (!linksContent[date.getFullYear()]) linksContent[date.getFullYear()] = []
+    linksContent[date.getFullYear()].unshift(meta)
 
     return meta;
   },
   "links",
 );
+
+// generate links root
+
+(() => {
+  const templateContent = loadTemplate('home.html')
+
+  let html = '';
+
+  for (const year in linksContent) {
+    let section = ''
+    section += `<section data-year="${year}"><h2>${year}</h2>`
+
+    for (const link of linksContent[year]) {
+      section += template(`
+<div class="link">
+  <a href="{{url}}" target="_blank">{{url}}</a>
+
+  {{html}}
+
+  <div class="row">
+    {{title}} <a href="/links/{{filename}}">Permalink</a>
+  </div>
+</div>`, link)
+    }
+
+    section += `</section>`
+    html = section + html
+  }
+
+  html = `<article id="links">${html}</article>`
+
+  const generated = template(templateContent, {
+    title: 'Dalton Rowe - Links',
+    html
+  })
+
+  const distFilePath = path.join(distPath, 'links.html');
+  fs.writeFileSync(distFilePath, generated, {
+    encoding: "utf-8",
+  });
+})();
 
 // generate home
 
@@ -161,26 +207,6 @@ generate(
     encoding: "utf-8",
   });
 })();
-
-// generate links root
-
-(() => {
-  const templateContent = loadTemplate('home.html')
-
-  const contentPath = path.join('links.html');
-  const content = fs.readFileSync(contentPath, { encoding: "utf-8" });
-
-  const generated = template(templateContent, {
-    title: 'Dalton Rowe',
-    html: content
-  })
-
-  const distFilePath = path.join(distPath, 'links.html');
-
-  fs.writeFileSync(distFilePath, generated, {
-    encoding: "utf-8",
-  });
-})()
 
 // copy static assets
 

@@ -1,5 +1,5 @@
 {
   "url": "https://amanvir.com/blog/writing-my-own-dithering-algorithm-in-racket",
-  "description": "Custom",
-  "quote": "variation"
+  "description": "Custom variation on dithering algorithms with a great explanation of error diffusion.",
+  "quote": ""
 }

@@ -1,0 +1,5 @@
+{
+  "url": "https://www.kenmuse.com/blog/how-to-handle-step-and-job-errors-in-github-actions/",
+  "description": "Good breakdown of Actions continue-on-failure, which has some non-obvious behaviors regarding workflow pass/fail",
+  "quote": ""
+}

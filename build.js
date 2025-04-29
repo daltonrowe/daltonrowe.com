@@ -23,8 +23,10 @@ function humanDate(date) {
 
 function markupLink(json) {
   let html = "";
-  if (json.quote) html += `<blockquote>&quot;${json.quote.replaceAll('\n', '<br>')}&quot;</blockquote>`;
-  if (json.description) html += `<p>${json.description.replaceAll('\n', '<br>')}</p>`;
+  if (json.quote)
+    html += `<blockquote>&quot;${json.quote.replaceAll("\n", "<br>")}&quot;</blockquote>`;
+  if (json.description)
+    html += `<p>${json.description.replaceAll("\n", "<br>")}</p>`;
 
   return html;
 }
@@ -42,7 +44,7 @@ function loadTemplate(templateName) {
     encoding: "utf-8",
   });
 
-  return template
+  return template;
 }
 
 // templating
@@ -70,13 +72,10 @@ function generate(dirName, templateName, buildMeta, subDir = "") {
     const contentPath = path.join(contentDir, file);
     const content = fs.readFileSync(contentPath, { encoding: "utf-8" });
 
-    const meta = buildMeta(file, content)
+    const meta = buildMeta(file, content);
 
     if (meta.html) {
-      const generated = fillTemplate(
-        template,
-        meta,
-      );
+      const generated = fillTemplate(template, meta);
 
       const distFilePath = path.join(distDirPath, `${file.split(".")[0]}.html`);
       fs.writeFileSync(distFilePath, generated, {
@@ -89,7 +88,7 @@ function generate(dirName, templateName, buildMeta, subDir = "") {
 
 // generate links
 
-const linksContent = {}
+const linksContent = {};
 
 generate(
   "links",
@@ -97,21 +96,22 @@ generate(
   (file, content) => {
     const filename = file.split(".")[0];
     const dateStr = filename.includes("_") ? filename.split("_")[0] : filename;
-    const date = new Date(dateStr)
+    const date = new Date(dateStr);
 
-    const title = humanDate(date)
+    const title = humanDate(date);
     const json = JSON.parse(content);
-    const html = markupLink(json)
+    const html = markupLink(json);
 
     const meta = {
       ...json,
       title,
       html,
-      filename
+      filename,
     };
 
-    if (!linksContent[date.getFullYear()]) linksContent[date.getFullYear()] = []
-    linksContent[date.getFullYear()].unshift(meta)
+    if (!linksContent[date.getFullYear()])
+      linksContent[date.getFullYear()] = [];
+    linksContent[date.getFullYear()].unshift(meta);
 
     return meta;
   },
@@ -121,37 +121,37 @@ generate(
 // generate links root
 
 (() => {
-  const template = loadTemplate('home.html')
-  const itemContent = loadTemplate('link-item.html')
+  const template = loadTemplate("home.html");
+  const itemContent = loadTemplate("link-item.html");
 
-  let html = '';
+  let html = "";
 
   for (const year in linksContent) {
-    let section = ''
-    section += `<section data-year="${year}"><h2>${year}</h2>`
+    let section = "";
+    section += `<section data-year="${year}"><h2>${year}</h2>`;
 
     for (const link of linksContent[year]) {
-      section += fillTemplate(itemContent, link)
+      section += fillTemplate(itemContent, link);
     }
 
-    section += `</section>`
-    html = section + html
+    section += "</section>";
+    html = section + html;
   }
 
-  html = `<article id="links">${html}</article>`
+  html = `<article id="links">${html}</article>`;
 
   const generated = fillTemplate(template, {
-    title: 'Dalton Rowe - Links',
-    html
-  })
+    title: "Dalton Rowe - Links",
+    html,
+  });
 
-  const distFilePath = path.join(distPath, 'links.html');
+  const distFilePath = path.join(distPath, "links.html");
   fs.writeFileSync(distFilePath, generated, {
     encoding: "utf-8",
   });
 })();
 
-const articlesContent = []
+const articlesContent = [];
 
 // generate articles
 
@@ -165,14 +165,14 @@ generate("articles", "article.html", (file, content) => {
     headline: json.headline ?? "",
     subtitle: json.subtitle ?? "",
     url: json.url ?? file,
-    attrs: json.url?.includes('://') ? 'target="_blank"' : '',
-    thumb: file.split('.')[0],
+    attrs: json.url?.includes("://") ? 'target="_blank"' : "",
+    thumb: file.split(".")[0],
     shorttitle: json.shorttitle ?? json.subtitle,
     datetime: new Date(json.date).getTime(),
     html,
-  }
+  };
 
-  articlesContent.push(meta)
+  articlesContent.push(meta);
 
   return meta;
 });
@@ -180,25 +180,25 @@ generate("articles", "article.html", (file, content) => {
 // generate home
 
 (() => {
-  const template = loadTemplate('home.html')
-  const itemContent = loadTemplate('article-item.html')
+  const template = loadTemplate("home.html");
+  const itemContent = loadTemplate("article-item.html");
 
-  let html = ''
+  let html = "";
 
-  articlesContent.sort((a, b) => a.datetime < b.datetime ? 1 : -1)
+  articlesContent.sort((a, b) => (a.datetime < b.datetime ? 1 : -1));
 
   for (const article of articlesContent) {
-    html += fillTemplate(itemContent, article)
+    html += fillTemplate(itemContent, article);
   }
 
-  html = `<section id="projects"><ul>${html}</ul></section>`
+  html = `<section id="projects"><ul>${html}</ul></section>`;
 
   const generated = fillTemplate(template, {
-    title: 'Dalton Rowe',
+    title: "Dalton Rowe",
     html,
-  })
+  });
 
-  const distFilePath = path.join(distPath, 'index.html');
+  const distFilePath = path.join(distPath, "index.html");
 
   fs.writeFileSync(distFilePath, generated, {
     encoding: "utf-8",

@@ -120,7 +120,7 @@ main {
     max-width: 500px;
     overflow: hidden;
 
-    &>a {
+    & > a {
       background-color: var(--accent-color);
       color: black;
       font-size: 15px;
@@ -128,7 +128,6 @@ main {
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
-
     }
   }
 

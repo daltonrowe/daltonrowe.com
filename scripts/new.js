@@ -4,31 +4,39 @@ import * as path from "node:path";
 const [, , type] = process.argv;
 
 let content;
-let distDir
-let distFile
+let distDir;
+let distFile;
 
-if (type === 'link') {
+if (type === "link") {
   const [, , , url, description, quote] = process.argv;
 
   const data = {
     url: url ?? "",
     description: description ?? "",
     quote: quote ?? "",
-  }
+  };
 
-  content = JSON.stringify(data, null, 2)
+  content = JSON.stringify(data, null, 2);
 
-  distDir = 'links'
-  distFile = 'json'
+  distDir = "links";
+  distFile = "json";
 }
 
-if (type === 'thought') {
+if (type === "thought") {
   const [, , , thought] = process.argv;
 
-  content = `<p>${thought}</p>`;
+  let lines;
 
-  distDir = 'thoughts'
-  distFile = 'html'
+  if (thought.indexOf("\\n") !== -1) {
+    lines = thought.split("\\n");
+  } else {
+    lines = [thought];
+  }
+
+  content = lines.map(line => `<p>${line}</p>`).join('\n\n')
+
+  distDir = "thoughts";
+  distFile = "html";
 }
 
 const distPath = path.join(import.meta.dirname, "..", distDir);

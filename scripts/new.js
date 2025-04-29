@@ -35,6 +35,10 @@ if (type === "thought") {
 
   content = lines.map(line => `<p>${line}</p>`).join('\n\n')
 
+  const postable = `Postable Content:\n\n${lines.join('\n')}\n`
+  console.log(postable);
+
+
   distDir = "thoughts";
   distFile = "html";
 }

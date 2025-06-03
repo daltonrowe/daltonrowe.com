@@ -82,7 +82,9 @@ blockquote {
   margin: 0 auto 20px auto;
 }
 
-pre {
+pre,
+code {
+  display: block;
   background: #322;
   padding: 20px;
   font-size: 12px;
@@ -90,6 +92,17 @@ pre {
   margin: 0 auto 20px auto;
   overflow-x: scroll;
   color: #eed;
+  white-space: pre-wrap;
+}
+
+p {
+  pre,
+  code {
+    display: inline;
+    white-space: normal;
+    padding: 4px;
+    font-size: 14px;
+  }
 }
 
 p {

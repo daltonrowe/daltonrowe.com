@@ -206,11 +206,17 @@ ol.contents li a:hover {
 #signoff {
   height: 120px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   place-items: center;
+  gap: 20px;
+
+  a {
+    color: #444;
+  }
 }
 
-#signoff:after {
+#signoff:before {
   content: "DR";
   background: var(--accent-color);
   color: var(--accent-color);

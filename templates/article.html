@@ -1,26 +1,26 @@
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/css/shared.css" />
+    <link rel="stylesheet" href="/css/article.css" />
 
-<head>
-  <meta charset="UTF-8" />
-  <title>{{title}}</title>
-  <link rel="stylesheet" href="/css/shared.css" />
-  <link rel="stylesheet" href="/css/article.css" />
+    <link rel="icon" type="image/png" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
 
-  <link rel="icon" type="image/png" href="/favicon.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-</head>
+  <body class="article">
+    <header id="header">
+      <a class="back" href="/">← Back</a>
+      <h1>{{headline}}</h1>
+      <span class="subtitle">{{subtitle}}</span>
+    </header>
 
-<body class="article">
-  <header id="header">
-    <a class="back" href="/">← Back</a>
-    <h1>{{headline}}</h1>
-    <span class="subtitle">{{subtitle}}</span>
-  </header>
-
-  <main id="main">
-    {{html}}
-    <div id="signoff"></div>
-  </main>
-</body>
-
+    <main id="main">
+      {{html}}
+      <div id="signoff">
+        <a href="https://bsky.app/profile/daltonrowe.com">Bluesky</a>
+      </div>
+    </main>
+  </body>
 </html>

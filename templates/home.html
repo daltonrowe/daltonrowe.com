@@ -1,31 +1,28 @@
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="./css/shared.css" />
+    <link rel="stylesheet" href="./css/home.css" />
 
-<head>
-  <meta charset="UTF-8" />
-  <title>{{title}}</title>
-  <link rel="stylesheet" href="./css/shared.css" />
-  <link rel="stylesheet" href="./css/home.css" />
+    <link rel="icon" type="image/png" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
 
-  <link rel="icon" type="image/png" href="favicon.svg" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-</head>
+  <body>
+    <header id="home-header">
+      <h1>
+        <a href="/">Dalton Rowe</a>
+      </h1>
 
-<body>
-  <header id="home-header">
-    <h1>
-      <a href="/">Dalton Rowe</a>
-    </h1>
+      <nav id="nav">
+        <a href="https://github.com/daltonrowe?tab=repositories">Code</a>
+        <a href="./resume" title="View Resume">Work</a>
+        <a href="./links" title="Links">Links</a>
+        <a href="https://bsky.app/profile/daltonrowe.com">Bluesky</a>
+      </nav>
+    </header>
 
-    <nav id="nav">
-      <a href="https://github.com/daltonrowe?tab=repositories">Code</a>
-      <a href="./resume" title="View Resume">Work</a>
-      <a href="./links" title="Links">Links</a>
-    </nav>
-  </header>
-
-  <main id="main">
-    {{html}}
-  </main>
-</body>
-
+    <main id="main">{{html}}</main>
+  </body>
 </html>

@@ -1,0 +1,83 @@
+{
+  "title": "Rails View Components + Form Builders",
+  "headline": "Rails View Components + Form Builders",
+  "subtitle": "",
+  "shorttitle": "",
+  "date": "2025-05-02"
+}
+
+%%%
+
+
+<section>
+  <p>
+    I've been building a new Rails 8 application recently. I'm all in on View
+    Components, and have enjoyed building it out as pure and Rails-y as
+    possible.
+  </p>
+
+  <p>
+    I came across a (documented) gotcha around using Rails Form Builders in View
+    Components. Here's how I got the setup I want.
+  </p>
+
+  <h2>Setting default Form Builder in Rails View Components</h2>
+
+  <code>
+class ApplicationComponent < ViewComponent::Base 
+  alias_method :original_form_with, :form_with 
+  
+  def form_with(**args, &block)
+    original_form_with(**args, builder: SimpleTeamFormBuilder, &block) 
+  end 
+end
+  </code>
+
+  <p>
+    The above renames the <code>form_with</code> method to
+    <code>original_form_with</code> to get it out of our way. It then inserts an
+    extra <code>builder: SimpleTeamFormBuilder</code>, so you never have to
+    think about it again.
+  </p>
+
+  <h2>Rest of the Set Up</h2>
+
+  <p>For posterity, here's the rest of my Rails View Component Form set up.</p>
+
+  <code>
+class MyFormBuilder < ActionView::Helpers::FormBuilder
+  def simple_submit(**args, &block)
+    defaults = {
+      type: :submit
+    }
+
+    view_context.render ButtonComponent.new(**defaults.merge(args))
+  end
+
+  private
+
+  def view_context
+    @view_context ||= ApplicationController.new.view_context
+  end
+end
+  </code>
+
+  <p>Here we create a new Form Builder at <code>config/initializers/my_form_builder.rb</code> inheriting from the default.
+  I've added a private method to get a controller ViewContext so we can render view components with no extra faffing about.</p>
+
+  <code>
+class ApplicationController < ActionController::Base
+  default_form_builder MyFormBuilder
+
+  ...
+end
+  </code>
+
+  <p>Lastly we set the default builder using the handy Rails <code>default_form_builder</code>, these folks thought of everything.</p>
+
+  <h2>Extra Context + Sources</h2>
+
+  <p>This was an <a href="https://viewcomponent.org/known_issues.html#forms-dont-use-the-default-formbuilder">intentional decision</a> to prevent unexpected changes to rendering behavior</p>
+
+  <p>Thanks to <a href="https://www.mendelowski.com/til/2024/02/rendering-view-component-from-form-builder">Lucas Mendelowski</a> for the helpful article on how to easily slot VCs into Form Builders, shown above.</p>
+</section>

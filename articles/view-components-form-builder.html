@@ -28,7 +28,7 @@ class ApplicationComponent < ViewComponent::Base
   alias_method :original_form_with, :form_with 
   
   def form_with(**args, &block)
-    original_form_with(**args, builder: SimpleTeamFormBuilder, &block) 
+    original_form_with(**args, builder: MyFormBuilder, &block) 
   end 
 end
   </code>
@@ -36,7 +36,7 @@ end
   <p>
     The above renames the <code>form_with</code> method to
     <code>original_form_with</code> to get it out of our way. It then inserts an
-    extra <code>builder: SimpleTeamFormBuilder</code>, so you never have to
+    extra <code>builder: MyFormBuilder</code>, so you never have to
     think about it again.
   </p>
 
@@ -46,12 +46,12 @@ end
 
   <code>
 class MyFormBuilder < ActionView::Helpers::FormBuilder
-  def simple_submit(**args, &block)
+  def my_submit(**args, &block)
     defaults = {
       type: :submit
     }
 
-    view_context.render ButtonComponent.new(**defaults.merge(args))
+    view_context.render MyButtonComponent.new(**defaults.merge(args))
   end
 
   private
@@ -59,6 +59,14 @@ class MyFormBuilder < ActionView::Helpers::FormBuilder
   def view_context
     @view_context ||= ApplicationController.new.view_context
   end
+end
+  </code>
+
+  <p>Allowing you to then use:</p>
+
+  <code>
+form_with ... do |form|
+  form.my_submit
 end
   </code>
 

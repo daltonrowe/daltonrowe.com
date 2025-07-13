@@ -1,0 +1,1 @@
+node --watch-path=./articles build.js

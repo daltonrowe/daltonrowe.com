@@ -1,5 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
+import { fillTemplate, generateArticleMeta } from "./lib";
 
 // clear out existing folders
 
@@ -47,17 +48,7 @@ function loadTemplate(templateName) {
   return template;
 }
 
-// templating
 
-function fillTemplate(template, meta) {
-  let markup = template;
-
-  for (const key in meta) {
-    markup = markup.replaceAll(`{{${key}}}`, meta[key]);
-  }
-
-  return markup;
-}
 
 function generate(dirName, templateName, buildMeta, subDir = "") {
   const contentDir = path.join(import.meta.dirname, dirName);
@@ -78,6 +69,7 @@ function generate(dirName, templateName, buildMeta, subDir = "") {
       const generated = fillTemplate(template, meta);
 
       const distFilePath = path.join(distDirPath, `${file.split(".")[0]}.html`);
+
       fs.writeFileSync(distFilePath, generated, {
         encoding: "utf-8",
         recursive: true,
@@ -155,26 +147,8 @@ const articlesContent = [];
 
 // generate articles
 
-generate("articles", "article.html", (file, content) => {
-  const [filemeta, html] = content.split("%%%");
-
-  const json = JSON.parse(filemeta);
-
-  const meta = {
-    title: json.title ?? "",
-    headline: json.headline ?? "",
-    subtitle: json.subtitle ?? "",
-    url: json.url ?? file,
-    attrs: json.url?.includes("://") ? 'target="_blank"' : "",
-    thumb: file.split(".")[0],
-    shorttitle: json.shorttitle ?? json.subtitle,
-    datetime: new Date(json.date).getTime(),
-    html,
-  };
-
-  articlesContent.push(meta);
-
-  return meta;
+generate("articles", "article.html", generateArticleMeta, (meta) => {
+  articlesContent.push(meta)
 });
 
 // generate home

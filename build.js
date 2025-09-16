@@ -3,6 +3,8 @@ import * as path from "node:path";
 
 // clear out existing folders
 
+const host = process.env.SITE_HOST ?? ""
+
 const distPath = path.join(import.meta.dirname, "dist");
 const distExists = fs.existsSync(distPath);
 
@@ -188,7 +190,7 @@ generate("articles", "article.html", (file, content) => {
   articlesContent.sort((a, b) => (a.datetime < b.datetime ? 1 : -1));
 
   for (const article of articlesContent) {
-    html += fillTemplate(itemContent, article);
+    html += fillTemplate(itemContent, { ...article, host });
   }
 
   html = `<section id="projects"><ul>${html}</ul></section>`;

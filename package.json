@@ -1,0 +1,21 @@
+{
+  "name": "daltonrowe.com",
+  "version": "1.0.0",
+  "description": "node --watch-path=./articles build.js",
+  "homepage": "https://github.com/daltonrowe/daltonrowe.com#readme",
+  "bugs": {
+    "url": "https://github.com/daltonrowe/daltonrowe.com/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daltonrowe/daltonrowe.com.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "build.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "serve dist"
+  }
+}

@@ -115,20 +115,34 @@ PNG input must be 8-bit and non-interlaced. Both are what tools emit by
 default; anything else throws with a message saying to re-save.
 
 Sources must be PNG. Handing `source` a JPEG or WebP names the format and says
-so rather than failing vaguely — run it through `scripts/ingest.js` (below), or
-vendor the decoder back in per `codecs/vendor/README.md`.
+so rather than failing vaguely — run it through `scripts/ingest.js --format
+png` (below), or vendor the decoder back in per `codecs/vendor/README.md`.
 
 ## getting photos in
 
-`scripts/ingest.js` turns phone photos into PNG masters this library can read.
-It is the only part of the repo with dependencies, and they are dev only — it
-runs when you add photos, not when the site builds.
+`scripts/ingest.js` turns phone photos into web-sized images. It is the only
+part of the repo with dependencies, and they are dev only — it runs when you
+add photos, not when the site builds.
 
 ```sh
 npm install                                  # once, for sharp
 node scripts/ingest.js ~/Downloads/IMG_2059.heic
 node scripts/ingest.js photos/*.heic --out articles/trip --width 1600
+node scripts/ingest.js photo.heic --format png   # to feed the effects graph
 ```
+
+Defaults are **jpg** at **1280** on the longest edge, which is a finished
+web asset rather than a master — small enough to commit, already the right
+size to publish.
+
+Note that jpg output is not readable by `source` above, by design: this build
+decodes PNG only. Photos you want to run effects over need `--format png`,
+which costs about 20x the bytes on disk. Two shapes that work:
+
+- ingest straight to jpg, and only re-ingest as png the few photos an effect
+  graph actually consumes
+- vendor `mozjpeg_dec` back (166 KB, see `codecs/vendor/README.md`) so `source`
+  reads jpg directly, and keep one ingested file per photo
 
 It handles four things that a plain convert gets wrong:
 

@@ -2,7 +2,7 @@
 //
 //   node scripts/ingest.js ~/Downloads/IMG_2059.heic
 //   node scripts/ingest.js photos/*.heic --out articles/trip --width 1600
-//   node scripts/ingest.js photo.jpg --format jpg --quality 88
+//   node scripts/ingest.js photo.heic --format png     # readable by lib/image
 //
 // this is the one part of the repo with dependencies, and they are dev only.
 // it runs when you add photos, not when the site builds — lib/image stays
@@ -59,8 +59,8 @@ if (!files.length || options.has("help")) {
       "usage: node scripts/ingest.js <photo...> [options]",
       "",
       "  --out <dir>       where to write (default: alongside the source)",
-      "  --width <px>      longest edge, never enlarges (default: 2000)",
-      "  --format <fmt>    png or jpg (default: png, what lib/image reads)",
+      "  --width <px>      longest edge, never enlarges (default: 1280)",
+      "  --format <fmt>    jpg or png (default: jpg; lib/image reads png)",
       "  --quality <n>     jpg quality (default: 90)",
     ].join("\n"),
   );
@@ -68,12 +68,17 @@ if (!files.length || options.has("help")) {
 }
 
 const outDir = flag("out", null);
-const maxWidth = Number(flag("width", 2000));
-const format = flag("format", "png");
+const maxWidth = Number(flag("width", 1280));
+const format = flag("format", "jpg");
 const quality = Number(flag("quality", 90));
 
 if (format !== "png" && format !== "jpg") {
   console.error(`unknown --format ${JSON.stringify(format)}, expected png or jpg`);
+  process.exit(1);
+}
+
+if (!Number.isFinite(maxWidth) || maxWidth < 1) {
+  console.error(`--width must be a positive number, got ${JSON.stringify(flag("width", ""))}`);
   process.exit(1);
 }
 
@@ -160,6 +165,8 @@ async function ingest(file) {
   let out = pipe
     // wide gamut sources shift if they are read as srgb later
     .toColorspace("srgb")
+    // a square bound with fit "inside" caps the longest edge whichever way
+    // round the photo is, and never scales a small source up
     .resize({ width: maxWidth, height: maxWidth, fit: "inside", withoutEnlargement: true });
 
   out = format === "png" ? out.png({ compressionLevel: 9 }) : out.jpeg({ quality, mozjpeg: true });
@@ -170,6 +177,12 @@ async function ingest(file) {
     outDir ?? path.dirname(file),
     `${path.basename(file, path.extname(file))}.${format}`,
   );
+
+  // ingesting a jpg as jpg with no --out lands on the source itself, which
+  // would replace the original with a downscaled copy
+  if (path.resolve(target) === path.resolve(file)) {
+    throw new Error("that would overwrite the source, pass --out <dir>");
+  }
 
   fs.mkdirSync(path.dirname(target), { recursive: true });
   fs.writeFileSync(target, data);

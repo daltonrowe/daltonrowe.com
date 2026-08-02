@@ -17,7 +17,8 @@
   "scripts": {
     "build": "node build.js",
     "dev": "node --watch-path=./articles build.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "fx": "node scripts/fx.js",
+    "test": "node --test",
     "serve": "npx --yes serve dist"
   }
 }

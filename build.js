@@ -18,6 +18,9 @@ function humanDate(date) {
     month: "long",
     day: "numeric",
     year: "numeric",
+    // filenames are bare dates, parsed as UTC midnight — format them the same
+    // way so the build doesn't shift dates on machines west of UTC
+    timeZone: "UTC",
   });
 }
 
@@ -156,28 +159,55 @@ generate(
 const articlesContent = [];
 
 // generate articles
+//
+// each article is a directory: metadata.json describes it, entry.html holds
+// the body (absent for link-only entries), and any other file is an image
+// copied out to img/ below.
 
-generate("articles", "article.html", (file, content) => {
-  const [filemeta, html] = content.split("%%%");
+(() => {
+  const contentDir = path.join(import.meta.dirname, "articles");
+  const template = loadTemplate("article.html");
 
-  const json = JSON.parse(filemeta);
+  for (const slug of fs.readdirSync(contentDir)) {
+    const articleDir = path.join(contentDir, slug);
+    if (!fs.statSync(articleDir).isDirectory()) continue;
 
-  const meta = {
-    title: json.title ?? "",
-    headline: json.headline ?? "",
-    subtitle: json.subtitle ?? "",
-    url: json.url ?? file,
-    attrs: json.url?.includes("://") ? 'target="_blank"' : "",
-    thumb: file.split(".")[0],
-    shorttitle: json.shorttitle ?? json.subtitle,
-    datetime: new Date(json.date).getTime(),
-    html,
-  };
+    const metadataPath = path.join(articleDir, "metadata.json");
+    if (!fs.existsSync(metadataPath)) continue;
 
-  articlesContent.push(meta);
+    const json = JSON.parse(
+      fs.readFileSync(metadataPath, { encoding: "utf-8" }),
+    );
 
-  return meta;
-});
+    const entryPath = path.join(articleDir, "entry.html");
+    const html = fs.existsSync(entryPath)
+      ? fs.readFileSync(entryPath, { encoding: "utf-8" })
+      : "";
+
+    const meta = {
+      title: json.title ?? "",
+      headline: json.headline ?? "",
+      subtitle: json.subtitle ?? "",
+      // no url and no body means there's nothing to link to yet — home.css
+      // styles that case so the thumbnail doesn't animate like a real link
+      url: json.url ?? (html.trim() ? `${slug}.html` : "#no-article-yet"),
+      attrs: json.url?.includes("://") ? 'target="_blank"' : "",
+      thumb: slug,
+      shorttitle: json.shorttitle ?? json.subtitle,
+      datetime: new Date(json.date).getTime(),
+      html,
+    };
+
+    articlesContent.push(meta);
+
+    if (!html.trim()) continue;
+
+    const generated = fillTemplate(template, meta);
+
+    const distFilePath = path.join(distPath, `${slug}.html`);
+    fs.writeFileSync(distFilePath, generated, { encoding: "utf-8" });
+  }
+})();
 
 // generate home
 
@@ -209,17 +239,53 @@ generate("articles", "article.html", (file, content) => {
 
 // copy static assets
 
-for (const rootFile of ["favicon.svg", "resume.html"]) {
+fs.cpSync(
+  path.join(import.meta.dirname, "favicon.svg"),
+  path.join(distPath, "favicon.svg"),
+);
+
+// standalone pages sit at the root alongside the generated ones
+
+const pagesDir = path.join(import.meta.dirname, "pages");
+
+for (const page of fs.readdirSync(pagesDir)) {
+  fs.cpSync(path.join(pagesDir, page), path.join(distPath, page));
+}
+
+// assets/ is flat, but templates reference /css and /js
+
+const assetDirs = { ".css": "css", ".js": "js" };
+const assetsDir = path.join(import.meta.dirname, "assets");
+
+for (const asset of fs.readdirSync(assetsDir)) {
+  const assetDir = assetDirs[path.extname(asset)];
+  if (!assetDir) continue;
+
+  fs.mkdirSync(path.join(distPath, assetDir), { recursive: true });
   fs.cpSync(
-    path.join(import.meta.dirname, rootFile),
-    path.join(import.meta.dirname, "dist", rootFile),
+    path.join(assetsDir, asset),
+    path.join(distPath, assetDir, asset),
   );
 }
 
-for (const cpPath of ["css", "img", "js"]) {
-  fs.cpSync(
-    path.join(import.meta.dirname, cpPath),
-    path.join(distPath, cpPath),
-    { recursive: true },
-  );
+// article images: the thumbnail is img/<slug>.png, everything else is
+// referenced from the entry as img/<slug>/<file>
+
+const articlesDir = path.join(import.meta.dirname, "articles");
+
+for (const slug of fs.readdirSync(articlesDir)) {
+  const articleDir = path.join(articlesDir, slug);
+  if (!fs.statSync(articleDir).isDirectory()) continue;
+
+  for (const file of fs.readdirSync(articleDir)) {
+    if (file === "metadata.json" || file === "entry.html") continue;
+
+    const distFilePath =
+      file === `${slug}.png`
+        ? path.join(distPath, "img", file)
+        : path.join(distPath, "img", slug, file);
+
+    fs.mkdirSync(path.dirname(distFilePath), { recursive: true });
+    fs.cpSync(path.join(articleDir, file), distFilePath);
+  }
 }

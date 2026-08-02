@@ -115,5 +115,35 @@ PNG input must be 8-bit and non-interlaced. Both are what tools emit by
 default; anything else throws with a message saying to re-save.
 
 Sources must be PNG. Handing `source` a JPEG or WebP names the format and says
-so rather than failing vaguely — convert the file, or vendor the decoder back
-in per `codecs/vendor/README.md`.
+so rather than failing vaguely — run it through `scripts/ingest.js` (below), or
+vendor the decoder back in per `codecs/vendor/README.md`.
+
+## getting photos in
+
+`scripts/ingest.js` turns phone photos into PNG masters this library can read.
+It is the only part of the repo with dependencies, and they are dev only — it
+runs when you add photos, not when the site builds.
+
+```sh
+npm install                                  # once, for sharp
+node scripts/ingest.js ~/Downloads/IMG_2059.heic
+node scripts/ingest.js photos/*.heic --out articles/trip --width 1600
+```
+
+It handles four things that a plain convert gets wrong:
+
+**EXIF orientation.** Phone photos are stored sideways with a tag saying which
+way is up. PNG has no such tag, so the rotation is baked into the pixels here
+or it is lost for good. This is the one that bites silently — the image just
+comes out rotated.
+
+**Display P3.** iPhones shoot wide gamut; left alone the colours shift once the
+file is treated as sRGB.
+
+**HEIC.** What iPhones actually shoot. sharp's prebuilt libvips reads the
+container but cannot decode HEVC, so those route through `heic-decode`.
+
+**Metadata**, dropped — which includes the GPS coordinates phone photos carry.
+
+Without `npm install` the script says so and exits; the rest of the project,
+including `npm test` and `npm run fx`, does not need it.

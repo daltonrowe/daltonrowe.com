@@ -20,5 +20,9 @@
     "fx": "node scripts/fx.js",
     "test": "node --test",
     "serve": "npx --yes serve dist"
+  },
+  "devDependencies": {
+    "heic-decode": "^2.1.0",
+    "sharp": "^0.35.3"
   }
 }

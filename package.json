@@ -1,7 +1,7 @@
 {
   "name": "daltonrowe.com",
   "version": "1.0.0",
-  "description": "node --watch-path=./articles build.js",
+  "description": "Static site generator for daltonrowe.com",
   "homepage": "https://github.com/daltonrowe/daltonrowe.com#readme",
   "bugs": {
     "url": "https://github.com/daltonrowe/daltonrowe.com/issues"
@@ -12,10 +12,12 @@
   },
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
+  "type": "module",
   "main": "build.js",
   "scripts": {
+    "build": "node build.js",
+    "dev": "node --watch-path=./articles build.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "serve dist"
+    "serve": "npx --yes serve dist"
   }
 }

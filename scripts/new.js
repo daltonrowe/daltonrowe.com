@@ -22,25 +22,9 @@ if (type === "link") {
   distFile = "json";
 }
 
-if (type === "thought") {
-  const [, , , thought] = process.argv;
-
-  let lines;
-
-  if (thought.indexOf("\\n") !== -1) {
-    lines = thought.split("\\n");
-  } else {
-    lines = [thought];
-  }
-
-  content = lines.map(line => `<p>${line}</p>`).join('\n\n')
-
-  const postable = `Postable Content:\n\n${lines.join('\n')}\n`
-  console.log(postable);
-
-
-  distDir = "thoughts";
-  distFile = "html";
+if (!distDir) {
+  console.error(`Unknown type "${type ?? ""}", expected: link`);
+  process.exit(1);
 }
 
 const distPath = path.join(import.meta.dirname, "..", distDir);

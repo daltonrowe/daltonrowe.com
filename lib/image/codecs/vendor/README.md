@@ -1,46 +1,53 @@
-# vendored codecs
+# vendored codec
 
 Checked in on purpose. Nothing here is installed from npm at build time, and
 nothing here has been edited — the files are byte-for-byte what the upstream
-packages ship, so refreshing them is a copy.
+package ships, so refreshing them is a copy.
 
 | file | from | bytes |
 | --- | --- | --- |
-| `mozjpeg_dec.js` / `.wasm` | `@jsquash/jpeg@1.6.0` `codec/dec/` | 166,470 |
 | `mozjpeg_enc.js` / `.wasm` | `@jsquash/jpeg@1.6.0` `codec/enc/` | 251,524 |
-| `webp_dec.js` / `.wasm` | `@jsquash/webp@1.5.0` `codec/dec/` | 137,960 |
-| `webp_enc_simd.js` / `.wasm` | `@jsquash/webp@1.5.0` `codec/enc/` | 345,584 |
 
-About 1.1 MB in total, of which ~900 KB is wasm.
+About 290 KB in total. That is the whole binary footprint of the image system.
 
-PNG is deliberately absent: `../png.js` does it in ~250 lines on `node:zlib`,
-which is smaller than any codec that could be vendored for the job.
+## what is deliberately absent
 
-## refreshing
+**PNG**, because `../png.js` does it in ~250 lines on `node:zlib`. Deflate plus
+five scanline filters is less code than any codec that could be vendored for
+the job.
+
+**Every decoder except PNG.** This build reads PNG only. The JPEG and WebP
+decoders came to ~300 KB of wasm to read formats that only appear as sources,
+and the effects pipeline works from PNG masters. `../index.js` still sniffs
+JPEG and WebP headers so feeding one in reports what is wrong rather than
+"unrecognised image".
+
+**WebP encode**, which was the single largest file at 346 KB.
+
+If you need any of them back, they are one `npm pack` away:
 
 ```sh
 npm pack @jsquash/jpeg @jsquash/webp
 # extract, then copy codec/{dec,enc}/* and codec/LICENSE.codec.md into here
 ```
 
-The glue files are ES modules that default-export an Emscripten factory.
-`../wasm.js` hands each one a `WebAssembly.Module` compiled from disk via
+then add a loader beside `loadJPEGEncoder` in `../wasm.js` and a branch in
+`../index.js`. Nothing above the codec layer needs to change — the graph and
+the effects only ever see RGBA.
+
+## how it loads under node
+
+The glue file is an ES module that default-exports an Emscripten factory.
+`../wasm.js` hands it a `WebAssembly.Module` compiled from disk via
 `instantiateWasm`, which is what stops the glue trying to `fetch` its own
-`.wasm` over HTTP — the reason these run unmodified under Node at all.
+`.wasm` over HTTP — the reason it runs unmodified under Node at all.
 
-## simd
-
-Only the SIMD build of the WebP encoder is vendored. Every V8 since Node 16.4
-has wasm SIMD on by default, so the ~280 KB fallback build would be bytes that
-never execute. `wasm.js` checks for SIMD support and explains what to vendor if
-a runtime ever reports it missing. The JPEG codecs and the WebP decoder are
-non-SIMD builds and need no such check.
+`mozjpeg_enc` is a non-SIMD build, so there is no feature detection to do.
 
 ## licenses
 
-- `LICENSE.jsquash.txt` — Apache 2.0, the jSquash wrappers and codec builds
+- `LICENSE.jsquash.txt` — Apache 2.0, the jSquash wrapper and codec build
 - `LICENSE.mozjpeg.md` — libjpeg-turbo / mozjpeg, BSD-style
-- `LICENSE.libwebp.md` — libwebp, BSD 3-clause
 
-All three permit redistribution in source and binary form with the notices
-kept, which is what checking these files in does.
+Both permit redistribution in source and binary form with the notices kept,
+which is what checking these files in does.

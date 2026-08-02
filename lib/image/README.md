@@ -1,8 +1,9 @@
 # image effects
 
 Composable image effects for the build, with no npm dependencies. Reads PNG,
-JPEG and WebP; writes the same three. Codecs are vendored into
-`codecs/vendor/` — see the README there for what and why.
+writes PNG and JPEG. PNG is pure JS on `node:zlib`; JPEG output goes through a
+vendored mozjpeg wasm build in `codecs/vendor/` — see the README there for what
+is in it, what was left out, and how to add a format back.
 
 ```sh
 npm run fx graphs/example.js        # render
@@ -50,7 +51,7 @@ A graph file default-exports one `{ node, file, options }` or an array of them.
 ```js
 export default [
   { node: thumbnail, file: "dist/fx/thumb.jpg", options: { quality: 82 } },
-  { node: treated, file: "dist/fx/treated.webp", options: { quality: 85 } },
+  { node: treated, file: "dist/fx/treated.png" },
 ];
 ```
 
@@ -112,3 +113,7 @@ Override the colour with `background`.
 
 PNG input must be 8-bit and non-interlaced. Both are what tools emit by
 default; anything else throws with a message saying to re-save.
+
+Sources must be PNG. Handing `source` a JPEG or WebP names the format and says
+so rather than failing vaguely — convert the file, or vendor the decoder back
+in per `codecs/vendor/README.md`.

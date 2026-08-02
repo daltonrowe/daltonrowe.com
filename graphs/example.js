@@ -17,7 +17,7 @@ import {
   vignette,
 } from "../lib/image/index.js";
 
-const photo = source({ file: "articles/inside-out/stagetids.jpg" });
+const photo = source({ file: "articles/inside-out/xmas-big.png" });
 
 // a reasonable article thumbnail: resize, lift the contrast, darken the edges
 const thumbnail = vignette(adjust(resize(photo, { width: 800 }), { contrast: 0.12, saturation: 0.1 }), {
@@ -45,6 +45,6 @@ export default [
   { node: thumbnail, file: "dist/fx/thumbnail.jpg", options: { quality: 82 } },
   { node: bloom, file: "dist/fx/bloom.jpg", options: { quality: 84 } },
   { node: treated, file: "dist/fx/duotone.jpg", options: { quality: 82 } },
-  { node: glitch, file: "dist/fx/glitch.webp", options: { quality: 85 } },
+  { node: glitch, file: "dist/fx/glitch.jpg", options: { quality: 85 } },
   { node: treated, file: "dist/fx/duotone.png" },
 ];

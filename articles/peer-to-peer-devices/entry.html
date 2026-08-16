@@ -1,0 +1,41 @@
+<section>
+  <img src="img/peer-to-peer-devices/peer-to-peer-devices-masthead.png" alt="Distorted image of radios" />
+
+  <p>I'm trying to build a hardware device that isn't connected to the internet, but still exposes a configuration UI
+    without the need for an external app.</p>
+
+  <p>It's an obvious capability that can exist but doesn't, because the market prefers a more exploitable interface.
+    The apps used to connect to our hardware have essentially unlimited permission to track our interactions, send data
+    home, or, most annoyingly, stop working altogether.</p>
+</section>
+
+<section>
+  <ul>
+    <li>communicate point to point with other devices</li>
+    <li>using standard web technologies</li>
+    <li>opt in to external network access</li>
+    <li>with no app stores or other middle men</li>
+  </ul>
+</section>
+
+<section>
+  <p>Here's the user experience I'm imagining:</p>
+
+  <ol>
+    <li>User taps an NFC point or scans a QR code.</li>
+    <li>OS prompts the user: "Connect to <em>some_device</em>?"</li>
+    <li>Default browser appears and loads the UI directly from <em>some_device</em>.</li>
+    <li>If the UI code attempts an outside connection, prompt: "Allow <em>some_device</em> would like to access the
+      internet."</li>
+  </ol>
+</section>
+
+<section>
+  <p>The most common pattern I see is devices exposing a Wi-Fi access point that I can then connect to and configure
+    via a captive portal. This technically works, but feels hacky.</p>
+</section>
+
+<section>
+  <p>This is a space I want to learn more about and experiment in. I think peer-to-peer device communication keeps
+    services alive longer, and is critical to ownership and long-term reliability for digital devices.</p>
+</section>

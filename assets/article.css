@@ -96,6 +96,7 @@ code {
 }
 
 p {
+
   pre,
   code {
     display: inline;
@@ -117,7 +118,8 @@ p a {
   text-decoration: underline;
 }
 
-p em {
+p em,
+li em {
   border-bottom: 1px solid var(--em-color);
   color: var(--accent-color);
   padding: 2px 3px;
@@ -147,7 +149,8 @@ figcaption {
   text-align: center;
 }
 
-ul {
+section ul,
+section ol {
   display: flex;
   flex-direction: column;
   color: white;
@@ -159,7 +162,13 @@ ul {
   gap: 10px;
 }
 
-ul li {
+section ol {
+  list-style: decimal;
+  list-style-position: inside;
+}
+
+ul li,
+ol li {
   padding: 16px;
   border: 1px solid #444;
 }

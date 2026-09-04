@@ -12,6 +12,16 @@ npx --yes serve dist                          # serve dist/ locally
 ```
 
 Set `SITE_HOST` to prefix the home page thumbnail urls with an absolute host.
+It also sets the host used by the feed, which falls back to
+`https://daltonrowe.com` when unset.
+
+## Feed
+
+The build writes an Atom feed to `dist/feed.xml` covering every article that
+has somewhere to point — placeholder entries with no body and no url are left
+out. Articles with a body carry their full html, with relative urls rewritten
+against the host so images and links resolve inside a reader. The home page and
+article pages advertise it with `<link rel="alternate">`.
 
 ## New content
 

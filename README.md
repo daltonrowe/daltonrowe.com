@@ -23,6 +23,18 @@ out. Articles with a body carry their full html, with relative urls rewritten
 against the host so images and links resolve inside a reader. The home page and
 article pages advertise it with `<link rel="alternate">`.
 
+## Open graph
+
+Every generated page gets open graph and twitter card tags, built from the
+content it already has: articles use their thumbnail as the card image and
+their `shorttitle` as the description, falling back to the opening paragraph of
+the body when there isn't one. Links use their description or quote, and hand
+written pages in `pages/` get a card built from their `<title>`.
+
+Drop an `og.png` next to `favicon.svg` to give the pages with no image of their
+own — the home page, links, and `pages/` — a share card. The card type follows
+the image: wide images advertise `summary_large_image`, square ones `summary`.
+
 ## New content
 
 `scripts/new.js` scaffolds an entry. Both modes print the path they wrote.

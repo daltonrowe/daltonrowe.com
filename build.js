@@ -11,6 +11,21 @@ const host = process.env.SITE_HOST ?? ""
 const siteUrl = (host || "https://daltonrowe.com").replace(/\/+$/, "");
 const siteTitle = "Dalton Rowe";
 const siteAuthor = "Dalton Rowe";
+const siteDescription =
+  "Product focused web developer. Projects, writing, and links.";
+
+// drop an og.png next to favicon.svg to give the pages that have no image of
+// their own a share card
+
+const defaultImage = fs.existsSync(
+  path.join(import.meta.dirname, "og.png"),
+)
+  ? `${siteUrl}/og.png`
+  : "";
+
+const defaultImageSize = defaultImage
+  ? pngSize(path.join(import.meta.dirname, "og.png"))
+  : null;
 
 const distPath = path.join(import.meta.dirname, "dist");
 const distExists = fs.existsSync(distPath);
@@ -50,6 +65,110 @@ function absoluteUrls(html) {
     /(\s(?:src|href)=")(?!https?:|\/\/|#|mailto:|data:)([^"]*)"/g,
     (_match, attr, url) => `${attr}${siteUrl}/${url.replace(/^\//, "")}"`,
   );
+}
+
+// open graph
+//
+// every generated page gets a card. descriptions come from the metadata when
+// it has one and fall back to the opening paragraph of the body.
+
+function escapeAttr(value) {
+  return escapeXml(value).replaceAll("&apos;", "&#39;");
+}
+
+// entities have to come back out before the text is escaped again for the
+// attribute, or an & in the body reaches the card as &amp;amp;
+
+function decodeEntities(text) {
+  return text
+    .replaceAll("&nbsp;", " ")
+    .replaceAll("&lt;", "<")
+    .replaceAll("&gt;", ">")
+    .replaceAll("&quot;", '"')
+    .replaceAll("&#39;", "'")
+    .replaceAll("&apos;", "'")
+    .replaceAll("&amp;", "&");
+}
+
+function stripTags(html) {
+  return decodeEntities(
+    html
+      .replaceAll(/<[^>]*>/g, " ")
+      .replaceAll(/\s+/g, " ")
+      .trim(),
+  );
+}
+
+function firstParagraph(html) {
+  const match = html.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
+  return match ? stripTags(match[1]) : "";
+}
+
+// square thumbnails belong on a small card, wide ones on a large card, so the
+// png header decides which is advertised
+
+function pngSize(filePath) {
+  if (!fs.existsSync(filePath)) return null;
+
+  const header = fs.readFileSync(filePath).subarray(0, 24);
+  if (header.length < 24 || header.toString("ascii", 1, 4) !== "PNG")
+    return null;
+
+  return { width: header.readUInt32BE(16), height: header.readUInt32BE(20) };
+}
+
+function truncate(text, max = 200) {
+  if (text.length <= max) return text;
+  return `${text.slice(0, max).replace(/\s+\S*$/, "")}…`;
+}
+
+function ogTags({
+  title,
+  description = "",
+  url,
+  image = defaultImage,
+  imageSize = image === defaultImage ? defaultImageSize : null,
+  type = "website",
+  publishedTime = "",
+  indent = 4,
+}) {
+  const text = truncate(description);
+
+  const tags = [
+    ["og:site_name", siteTitle],
+    ["og:type", type],
+    ["og:title", title],
+    ["og:url", url],
+  ];
+
+  if (text) tags.push(["og:description", text]);
+
+  if (image) {
+    tags.push(["og:image", image]);
+    tags.push(["og:image:alt", title]);
+
+    if (imageSize) {
+      tags.push(["og:image:width", imageSize.width]);
+      tags.push(["og:image:height", imageSize.height]);
+    }
+  }
+
+  if (publishedTime) tags.push(["article:published_time", publishedTime]);
+
+  const markup = tags.map(
+    ([property, content]) =>
+      `<meta property="${property}" content="${escapeAttr(content)}" />`,
+  );
+
+  const wide = imageSize && imageSize.width / imageSize.height >= 1.5;
+
+  markup.push(
+    `<meta name="twitter:card" content="${wide ? "summary_large_image" : "summary"}" />`,
+  );
+
+  if (text) markup.push(`<meta name="description" content="${escapeAttr(text)}" />`);
+
+  return markup.join(`\n${" ".repeat(indent)}`);
 }
 
 // process link json
@@ -140,6 +259,16 @@ generate(
       title,
       html,
       filename,
+      // og goes last: fillTemplate walks the keys in order, so anything after
+      // it would scan the markup this just inserted
+      og: ogTags({
+        title: `Link: ${json.url}`,
+        description: json.description || json.quote || "",
+        url: `${siteUrl}/links/${filename}`,
+        type: "article",
+        publishedTime: date.toISOString(),
+        indent: 2,
+      }),
     };
 
     if (!linksContent[date.getFullYear()])
@@ -176,6 +305,11 @@ generate(
   const generated = fillTemplate(template, {
     title: "Dalton Rowe - Links",
     html,
+    og: ogTags({
+      title: "Dalton Rowe - Links",
+      description: "Links worth keeping, collected by Dalton Rowe.",
+      url: `${siteUrl}/links`,
+    }),
   });
 
   const distFilePath = path.join(distPath, "links.html");
@@ -226,6 +360,19 @@ const articlesContent = [];
       html,
     };
 
+    meta.og = ogTags({
+      title: meta.title,
+      // meta.shorttitle falls back to the subtitle, which is often just a
+      // date — the opening paragraph reads better than that
+      description:
+        json.shorttitle || firstParagraph(html) || json.subtitle || "",
+      url: `${siteUrl}/${slug}.html`,
+      image: `${siteUrl}/img/${slug}.png`,
+      imageSize: pngSize(path.join(articleDir, `${slug}.png`)),
+      type: "article",
+      publishedTime: new Date(json.date).toISOString(),
+    });
+
     articlesContent.push(meta);
 
     if (!html.trim()) continue;
@@ -256,6 +403,11 @@ const articlesContent = [];
   const generated = fillTemplate(template, {
     title: "Dalton Rowe",
     html,
+    og: ogTags({
+      title: siteTitle,
+      description: siteDescription,
+      url: `${siteUrl}/`,
+    }),
   });
 
   const distFilePath = path.join(distPath, "index.html");
@@ -321,12 +473,45 @@ fs.cpSync(
   path.join(distPath, "favicon.svg"),
 );
 
+if (defaultImage)
+  fs.cpSync(
+    path.join(import.meta.dirname, "og.png"),
+    path.join(distPath, "og.png"),
+  );
+
 // standalone pages sit at the root alongside the generated ones
 
 const pagesDir = path.join(import.meta.dirname, "pages");
 
 for (const page of fs.readdirSync(pagesDir)) {
-  fs.cpSync(path.join(pagesDir, page), path.join(distPath, page));
+  const source = path.join(pagesDir, page);
+  const distFilePath = path.join(distPath, page);
+
+  // hand written pages carry no metadata, so their card is built from the
+  // title tag they already have
+
+  if (path.extname(page) !== ".html") {
+    fs.cpSync(source, distFilePath);
+    continue;
+  }
+
+  let markup = fs.readFileSync(source, { encoding: "utf-8" });
+  const title = markup.match(/<title>([\s\S]*?)<\/title>/i);
+
+  if (title && !markup.includes("og:")) {
+    const og = ogTags({
+      title: stripTags(title[1]),
+      description: siteDescription,
+      url: `${siteUrl}/${page.replace(/\.html$/, "")}`,
+      indent: 2,
+    });
+
+    // replacement callback: a $ in the description would otherwise be read
+    // as a substitution pattern
+    markup = markup.replace(title[0], () => `${title[0]}\n  ${og}`);
+  }
+
+  fs.writeFileSync(distFilePath, markup, { encoding: "utf-8" });
 }
 
 // assets/ is flat, but templates reference /css and /js

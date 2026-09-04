@@ -5,6 +5,13 @@ import * as path from "node:path";
 
 const host = process.env.SITE_HOST ?? ""
 
+// feeds need absolute urls, so fall back to the production host when the
+// build isn't given one
+
+const siteUrl = (host || "https://daltonrowe.com").replace(/\/+$/, "");
+const siteTitle = "Dalton Rowe";
+const siteAuthor = "Dalton Rowe";
+
 const distPath = path.join(import.meta.dirname, "dist");
 const distExists = fs.existsSync(distPath);
 
@@ -22,6 +29,27 @@ function humanDate(date) {
     // way so the build doesn't shift dates on machines west of UTC
     timeZone: "UTC",
   });
+}
+
+// xml helpers
+
+function escapeXml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&apos;");
+}
+
+// feed readers render entries away from the site, so site relative src/href
+// values have to be rewritten against the host
+
+function absoluteUrls(html) {
+  return html.replaceAll(
+    /(\s(?:src|href)=")(?!https?:|\/\/|#|mailto:|data:)([^"]*)"/g,
+    (_match, attr, url) => `${attr}${siteUrl}/${url.replace(/^\//, "")}"`,
+  );
 }
 
 // process link json
@@ -233,6 +261,55 @@ const articlesContent = [];
   const distFilePath = path.join(distPath, "index.html");
 
   fs.writeFileSync(distFilePath, generated, {
+    encoding: "utf-8",
+  });
+})();
+
+// generate atom feed
+//
+// every article that has somewhere to point, newest first. entries with a
+// body carry the full html; link only entries just carry their blurb.
+
+(() => {
+  const entries = [...articlesContent]
+    .filter((article) => !article.url.startsWith("#"))
+    .sort((a, b) => b.datetime - a.datetime);
+
+  const updated = new Date(entries[0]?.datetime ?? Date.now()).toISOString();
+
+  let xml = '<?xml version="1.0" encoding="utf-8"?>\n';
+  xml += '<feed xmlns="http://www.w3.org/2005/Atom">\n';
+  xml += `  <title>${escapeXml(siteTitle)}</title>\n`;
+  xml += `  <id>${escapeXml(`${siteUrl}/`)}</id>\n`;
+  xml += `  <link rel="alternate" type="text/html" href="${escapeXml(`${siteUrl}/`)}" />\n`;
+  xml += `  <link rel="self" type="application/atom+xml" href="${escapeXml(`${siteUrl}/feed.xml`)}" />\n`;
+  xml += `  <updated>${updated}</updated>\n`;
+  xml += `  <author><name>${escapeXml(siteAuthor)}</name></author>\n`;
+
+  for (const article of entries) {
+    const external = article.url.includes("://");
+    const link = external ? article.url : `${siteUrl}/${article.url}`;
+    const date = new Date(article.datetime).toISOString();
+
+    xml += "  <entry>\n";
+    xml += `    <title>${escapeXml(article.title)}</title>\n`;
+    xml += `    <id>${escapeXml(`${siteUrl}/${article.thumb}`)}</id>\n`;
+    xml += `    <link rel="alternate" type="text/html" href="${escapeXml(link)}" />\n`;
+    xml += `    <published>${date}</published>\n`;
+    xml += `    <updated>${date}</updated>\n`;
+
+    if (article.shorttitle)
+      xml += `    <summary>${escapeXml(article.shorttitle)}</summary>\n`;
+
+    if (article.html.trim())
+      xml += `    <content type="html">${escapeXml(absoluteUrls(article.html))}</content>\n`;
+
+    xml += "  </entry>\n";
+  }
+
+  xml += "</feed>\n";
+
+  fs.writeFileSync(path.join(distPath, "feed.xml"), xml, {
     encoding: "utf-8",
   });
 })();
